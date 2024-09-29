@@ -12,7 +12,7 @@ module.exports = {
   },
   plugins: [
     nextui(),
-    require('@tailwindcss/forms'),
+    // require('@tailwindcss/forms'),
   ],
 }
 

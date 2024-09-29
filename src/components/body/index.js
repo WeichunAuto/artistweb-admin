@@ -33,18 +33,18 @@ export class Body extends Component {
     render() {
 
         return (
-            <div className='flex flex-col'>
-                <div class='w-screen h-12 flex flex-row bg-blue-100'>
-                    <p className='basis-1/2 h-full text-left pl-4 content-center'>Hi, admin</p>
-                    <p className='basis-1/2 h-full text-right pr-4 font-medium content-center'>Artist Content Management System.</p>
-                </div>
+            // <div className='flex flex-col h-screen'>
+            //     <div class='w-screen h-12 flex flex-row bg-blue-100'>
+            //         <p className='basis-1/2 h-full text-left pl-4 content-center'>Hi, admin</p>
+            //         <p className='basis-1/2 h-full text-right pr-4 font-medium content-center'>Artist Content Management System.</p>
+            //     </div>
             
-                <div className='flex gap-2'>
-                    {/* <div> */}
+                <div className='flex gap-2 h-screen'>
+                    <div className='flex flex-col min-w-[250px] max-w-[300px] '>
                         <Listbox
                             aria-label="User Menu"
                             // onAction={(key) => alert(key)}
-                            className="h-screen p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[300px] overflow-visible shadow-small"
+                            className="basis-11/12 p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 overflow-visible shadow-small"
                             itemClasses={{
                                 base: "px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
                             }}
@@ -99,12 +99,13 @@ export class Body extends Component {
                             </ListboxItem>
                             
                         </Listbox>
-                    {/* </div> */}
+                        <div className='basis-1/12 text-xs text-center pb-2 content-end text-gray-500'>Artist Content Management System.</div>
+                    </div>
                     {/* <div> */}
-                        <Outlet/>
+                    <Outlet className='bg-gray-200'></Outlet>
                     {/* </div> */}
                 </div>
-            </div>
+            // </div>
             
         )
     }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ApiCon } from "../../config";
+import { ApiCon } from "../config";
 
 
 const axiosInstance = axios.create({
