@@ -1,9 +1,11 @@
 import React, {useReducer} from 'react'
+import SHA256 from 'crypto-js/sha256';
+import JwtToken from '../token/token'
 
-export default function Login() {
+export default function Login(props) {
 
     const initState = {
-        appName: 'admin',
+        appName: '',
         appKey: ''
     }
 
@@ -11,35 +13,32 @@ export default function Login() {
 
     function changeForm(e) {
         const {name, value} = e.target
-        
-        console.log(name)
-        console.log(value)
-
         dispatch({type: name, value})
-        // this.setState({
-        //     [name]: e.target.value,
-        // });
+    }
+
+    async function submitForm(e) {
+        e.preventDefault()
+        const {appName, appKey} = state
+        const hashedAppKey= SHA256(appKey).toString()
+        
+        const jwtToken = await JwtToken.getToken({appName: appName, appKey: hashedAppKey})
+        console.log(jwtToken)
+        
+        props.setJwtToken(jwtToken)
     }
 
     function hashOrSubmitHandler(state, action) {
-        console.log(action.type)
         switch(action.type) {
             case 'appName': {
                 return {...state, appName: action.value}
             }
             case 'appKey': {
-                const originalPassword = action.value
-
-                return {...state, appKey: originalPassword}
-
+                return {...state, appKey: action.value}
             }
-            case 'submit': {
-                console.log(state)
-                return
-            }
+            default:
+                return state
         }
     }
-
 
     return (
       <>
@@ -53,7 +52,7 @@ export default function Login() {
           </div>
   
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-6">
+            <form action='#' method="POST" className="space-y-6">
               <div>
                 <label htmlFor="appName" className="block text-sm font-medium leading-6 text-gray-900">
                   Account Name
@@ -97,7 +96,7 @@ export default function Login() {
                   type="button"
                   name='submit'
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={changeForm}
+                  onClick={submitForm}
                 >
                   Sign in
                 </button>
@@ -106,9 +105,7 @@ export default function Login() {
   
             <p className="mt-10 text-center text-sm text-gray-500">
               Not a member?{'   '}
-              <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                 Contact the Admin
-              </a>
             </p>
           </div>
         </div>
