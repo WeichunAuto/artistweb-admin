@@ -7,10 +7,7 @@ import {
   TableRow,
   TableCell,
   Input,
-  Textarea,
   Button,
-  Card,
-  CardBody,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
@@ -18,10 +15,10 @@ import {
   Chip,
   User,
   Pagination,
-  Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Switch, Spacer
+  useDisclosure
 } from "@nextui-org/react";
 import { PlusIcon, SearchIcon, VerticalDotsIcon, ChevronDownIcon } from "../../../icons/icons";
-
+import ModalForm from '../modalForm'
 import { columns, users, statusOptions } from "./data";
 import { capitalize } from "../../utils";
 
@@ -43,18 +40,9 @@ export default function PaintWork() {
     column: "PRICE",
     direction: "ascending",
   });
-  const [page, setPage] = React.useState(1);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modal to upload a new paint work.
-  const [isSelected, setIsSelected] = React.useState(true);
-  const [imageName, setImageName] = React.useState("");
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImageName(file.name);
-    }
-  };
+  const [page, setPage] = React.useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -312,7 +300,6 @@ export default function PaintWork() {
         topContentPlacement="outside"
         onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
-
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
@@ -334,87 +321,15 @@ export default function PaintWork() {
         </TableBody>
       </Table>
 
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        placement="top-center"
-        isDismissable={false}
-        size='2xl'
-      >
-        <ModalContent className="px-2">
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Add a New Painting Work</ModalHeader>
-              <ModalBody>
-                <Input
-                  isRequired
-                  autoFocus
-                  label="title"
-                  placeholder="Give a title for your painting"
-                // variant="bordered"
-                />
-                <Textarea
-                  label="description"
-                  placeholder="You can say something about your work."
-                  className=""
-                />
-
-                <Input
-                  type="number"
-                  label="price"
-                  placeholder="0.00"
-                  className="basis-1/2"
-                  // labelPlacement="outside"
-                  startContent={
-                    <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">$</span>
-                    </div>
-                  }
-                />
-
-                <Card shadow='sm'>
-                  <CardBody className='w-full flex flex-col'>
-                    <p className="w-full text-xs text-gray-500">upload an image</p>
-                    <div className="w-full flex flex-row justify-between items-center">
-                      <p className="col-span-2">
-                        {imageName && <p className="text-gray-700">{imageName}</p>}
-                      </p>
-
-                      <input
-                        type="file"
-                        id="file-upload"
-                        style={{ display: "none" }}
-                        onChange={handleFileChange}
-                      />
-                      <label htmlFor="file-upload">
-                        <Button as="span" color="primary" auto size="sm">
-                          Choose Image
-                        </Button>
-                      </label>
-                    </div>
-                  </CardBody>
-                </Card>
-
-                <div className="grid gap-0  justify-items-end">
-                  <Switch size='sm' isSelected={isSelected} onValueChange={setIsSelected}>
-                    Active
-                  </Switch>
-                  <p className="text-sm text-default-500">Selected: {isSelected ? "true" : "false"}</p>
-                </div>
-              </ModalBody>
-              
-              <ModalFooter className="pt-20">
-                <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Confirm
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <ModalForm fields={
+        {
+          title:true,
+          description: true,
+          price: true,
+          img: true,
+          active: true
+        }
+      } isOpen={isOpen} onOpenChange={onOpenChange}/>
     </>
   );
 }
