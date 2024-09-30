@@ -17,7 +17,7 @@ const columns = [
   const users = [
     {
       id: 1,
-      name: "Tony Reichert",
+      title: "Tony Reichert",
       description: "CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -26,34 +26,34 @@ const columns = [
     },
     {
       id: 2,
-      name: "Zoey Lang",
+      title: "Zoey Lang",
       description: "CEO a CEO",
-      price: '200',
+      price: '250',
       date: "29-07-2023",
       status: "paused",
       avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
     },
     {
       id: 3,
-      name: "Jane Fisher",
+      title: "Jane Fisher",
       description: "CEO a CEO",
-      price: '200',
+      price: '100',
       date: "29-07-2023",
       status: "paused",
       avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
     },
     {
       id: 4,
-      name: "William Howard",
+      title: "William Howard",
       description: "CEO a CEO",
-      price: '200',
+      price: '120',
       date: "29-07-2023",
       status: "active",
       avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
     },
     {
       id: 5,
-      name: "Kristen Copper",
+      title: "Kristen Copper",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -62,7 +62,7 @@ const columns = [
     },
     {
       id: 6,
-      name: "Brian Kim",
+      title: "Brian Kim",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -71,7 +71,7 @@ const columns = [
     },
     {
       id: 7,
-      name: "Michael Hunt",
+      title: "Michael Hunt",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -80,7 +80,7 @@ const columns = [
     },
     {
       id: 8,
-      name: "Samantha Brooks",
+      title: "Samantha Brooks",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -89,7 +89,7 @@ const columns = [
     },
     {
       id: 9,
-      name: "Frank Harrison",
+      title: "Frank Harrison",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -98,7 +98,7 @@ const columns = [
     },
     {
       id: 10,
-      name: "Emma Adams",
+      title: "Emma Adams",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -107,7 +107,7 @@ const columns = [
     },
     {
       id: 11,
-      name: "Brandon Stevens",
+      title: "Brandon Stevens",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",
@@ -116,7 +116,7 @@ const columns = [
     },
     {
       id: 12,
-      name: "Megan Richards",
+      title: "Megan Richards",
       description: "CEO a CEO",
       price: '200',
       date: "29-07-2023",

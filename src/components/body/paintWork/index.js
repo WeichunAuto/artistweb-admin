@@ -36,7 +36,7 @@ export default function PaintWork() {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "price",
+    column: "PRICE",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -77,8 +77,8 @@ export default function PaintWork() {
 
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+      const first = a[sortDescriptor.column.toLowerCase()];
+      const second = b[sortDescriptor.column.toLowerCase()];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
