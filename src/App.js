@@ -8,10 +8,14 @@ export class App extends Component {
 
   componentDidMount() {
     const cacheToken = localStorage.getItem('token')
+    
         if(cacheToken) {
             const token = atob(cacheToken)  // base64 decode token after getting from local storage.
-            console.log('cached token: ' + token)
-            this.setState({jwtToken: token})
+            if(token === 'null') {
+              this.setState({jwtToken: null})
+            } else {
+              this.setState({jwtToken: token})
+            }
         } 
   }
 
