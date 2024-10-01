@@ -16,6 +16,9 @@ export class Body extends Component {
         if (cacheToken) {
             const token = atob(cacheToken)  // base64 decode token after getting from local storage.
             console.log('in body: ' + token)
+            this.setState({
+                jwtToken: token
+            })
 
             // request data here.
 
@@ -101,12 +104,10 @@ export class Body extends Component {
                         </Listbox>
                         <div className='basis-1/12 text-xs text-center pb-2 content-end text-gray-500'>Artist Content Management System.</div>
                     </div>
-                    {/* <div> */}
-                    <Outlet className='bg-gray-200'></Outlet>
-                    {/* </div> */}
+                    {console.log('check token : ' + this.state.jwtToken)}
+                    <Outlet context={{ jwtToken: this.state.jwtToken, setJwtToken: this.props.setJwtToken }} className='bg-gray-200'></Outlet>
+                    
                 </div>
-            // </div>
-            
         )
     }
 }

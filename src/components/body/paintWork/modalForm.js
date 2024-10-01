@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState} from 'react'
+import axiosInstance from '../../axios/request';
 import {
     Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Switch, Card, CardBody, Button,
     Input, Textarea
@@ -10,17 +11,58 @@ import {
  * @returns 
  */
 function ModalForm(props) {
-    const {fields, isOpen, onOpenChange} = props
+    const {fields, isOpen, onOpenChange, tokenControl} = props
 
-    const [isSelected, setIsSelected] = React.useState(true);
-    const [imageName, setImageName] = React.useState("");
+    const [image, setImage] = useState(null);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
+    const [paintWork, setPaintWork] = useState({
+        title: '',
+        description: '',
+        price: '',
+        status: true
+    })
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        
         if (file) {
-          setImageName(file.name);
+            console.log(file)
+          setImage(file);
         }
-      };
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name !== 'status') {
+            setPaintWork({ ...paintWork, [name]: value });
+        } else {
+            setPaintWork({ ...paintWork, [name]: e.target.checked });
+        }
+    }
+
+    const submitHandler = (e) =>{
+        console.log(paintWork)
+        const formData = new FormData();
+        formData.append("imageFile", image);
+        formData.append(
+            "paintWork",
+            new Blob([JSON.stringify(paintWork)], { type: "application/json" })
+          );
+        axiosInstance.post('/addPaintWork', formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': 'Bearer ' + tokenControl.jwtToken
+              },
+        }).then((response) => {
+            console.log("paintWork added successfully:", response.data);
+            if(!response.data) { // normally, token is invalid, then require to login.
+                tokenControl.setJwtToken(null)
+            }
+        
+        }).catch((error) => {
+            console.error("Error adding product:", error);
+          });
+    }
 
     return (
         <Modal
@@ -40,26 +82,34 @@ function ModalForm(props) {
                             isRequired
                             autoFocus
                             label="title"
+                            name="title"
                             placeholder="Give a title for your painting"
+                            value = {paintWork.title}
+                            onChange={handleInputChange}
                             // variant="bordered"
                         />
                     }
                     {fields.description &&
-                            <Textarea
+                        <Textarea
                             label="description"
+                            name="description"
                             placeholder="You can say something about your work."
-                            className=""
+                            value = {paintWork.description}
+                            onChange={handleInputChange}
                         />
                     }
                     {fields.price &&
                         <Input
                             type="number"
                             label="price"
+                            name="price"
                             placeholder="0.00"
                             className="basis-1/2"
+                            value = {paintWork.price}
+                            onChange={handleInputChange}
                             startContent={
                                 <div className="pointer-events-none flex items-center">
-                                <span className="text-default-400 text-small">$</span>
+                                    <span className="text-default-400 text-small">$</span>
                                 </div>
                             }
                         />
@@ -69,19 +119,19 @@ function ModalForm(props) {
                             <CardBody className='w-full flex flex-col'>
                                 <p className="w-full text-xs text-gray-500">upload an image</p>
                                 <div className="w-full flex flex-row justify-between items-center">
-                                <p className="col-span-2">
-                                    {imageName && <p className="text-gray-700">{imageName}</p>}
-                                </p>
+                                <div className="col-span-2">
+                                    {image && <div className="text-gray-700">{image.name}</div>}
+                                </div>
 
                                 <input
                                     type="file"
                                     id="file-upload"
                                     style={{ display: "none" }}
-                                    onChange={handleFileChange}
+                                    onChange={handleImageChange}
                                 />
                                 <label htmlFor="file-upload">
                                     <Button as="span" color="primary" auto size="sm">
-                                    Choose Image
+                                        Choose Image
                                     </Button>
                                 </label>
                                 </div>
@@ -90,10 +140,10 @@ function ModalForm(props) {
                     }
                     {fields.active &&
                         <div className="grid gap-0  justify-items-end">
-                            <Switch size='sm' isSelected={isSelected} onValueChange={setIsSelected}>
+                            <Switch size='sm' name='status' value={paintWork.status} isSelected={paintWork.status} onChange={handleInputChange}>
                                 Active
                             </Switch>
-                            <p className="text-sm text-default-500">Selected: {isSelected ? "true" : "false"}</p>
+                            <p className="text-sm text-default-500">Selected: {paintWork.status ? "true" : "false"}</p>
                         </div>
                     }
                 </ModalBody>
@@ -102,7 +152,7 @@ function ModalForm(props) {
                     <Button color="danger" variant="flat" onPress={onClose}>
                     Close
                     </Button>
-                    <Button color="primary" onPress={onClose}>
+                    <Button color="primary" onPress={submitHandler}>
                     Confirm
                     </Button>
                 </ModalFooter>

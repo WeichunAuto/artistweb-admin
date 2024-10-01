@@ -1,4 +1,6 @@
-import React from "react";
+import React from "react"
+import { useOutletContext } from 'react-router-dom'
+
 import {
   Table,
   TableHeader,
@@ -18,7 +20,7 @@ import {
   useDisclosure
 } from "@nextui-org/react";
 import { PlusIcon, SearchIcon, VerticalDotsIcon, ChevronDownIcon } from "../../../icons/icons";
-import ModalForm from '../modalForm'
+import ModalForm from './modalForm'
 import { columns, users, statusOptions } from "./data";
 import { capitalize } from "../../utils";
 
@@ -40,6 +42,10 @@ export default function PaintWork() {
     column: "PRICE",
     direction: "ascending",
   });
+
+  const { jwtToken, setJwtToken } = useOutletContext();
+
+  console.log('token from body = ' + jwtToken)
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modal to upload a new paint work.
   const [page, setPage] = React.useState(1);
@@ -323,13 +329,17 @@ export default function PaintWork() {
 
       <ModalForm fields={
         {
-          title:true,
+          title: true,
           description: true,
           price: true,
           img: true,
           active: true
         }
-      } isOpen={isOpen} onOpenChange={onOpenChange}/>
+      } 
+      isOpen={isOpen} 
+      onOpenChange={onOpenChange} 
+      tokenControl = {{ jwtToken, setJwtToken }}
+      />
     </>
   );
 }
