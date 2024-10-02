@@ -4,6 +4,7 @@ import {IconWrapper} from "../../icons/iconWrapper";
 import { ItemCounter } from "./itemCounter";
 import {BookIcon, FaceIcon, WallIcon} from '../../icons/icons'
 import { NavLink, Outlet } from 'react-router-dom'
+import App from '../../App'
 
 export class Body extends Component {
     state = {
@@ -13,17 +14,22 @@ export class Body extends Component {
     componentDidMount() {
         // localStorage.clear('token')
         const cacheToken = localStorage.getItem('token')
-        if (cacheToken) {
-            const token = atob(cacheToken)  // base64 decode token after getting from local storage.
-            console.log('in body: ' + token)
-            this.setState({
-                jwtToken: token
-            })
 
-            // request data here.
+        if(cacheToken === null) {
 
         } else {
-            this.props.setJwtToken(null) // return to the login page.
+            const token = atob(cacheToken)  // base64 decode token after getting from local storage.
+
+            if (token === 'null') {
+                const setJwtToken = this.props.setJwtToken
+                if(setJwtToken) {
+                    setJwtToken(null)  // return to the login page
+                } else {} 
+            } else {            
+                this.setState({
+                    jwtToken: token
+                })
+            }
         }
     }
 
@@ -34,14 +40,10 @@ export class Body extends Component {
     }
 
     render() {
-
         return (
-            // <div className='flex flex-col h-screen'>
-            //     <div class='w-screen h-12 flex flex-row bg-blue-100'>
-            //         <p className='basis-1/2 h-full text-left pl-4 content-center'>Hi, admin</p>
-            //         <p className='basis-1/2 h-full text-right pr-4 font-medium content-center'>Artist Content Management System.</p>
-            //     </div>
-            
+                this.state.jwtToken === null 
+                ? <App/>
+                :
                 <div className='flex gap-2 h-screen'>
                     <div className='flex flex-col min-w-[250px] max-w-[300px] '>
                         <Listbox
@@ -61,7 +63,7 @@ export class Body extends Component {
                                 </IconWrapper>
                                 }
                             >
-                                <NavLink to='/paintWork'>
+                                <NavLink to='/body/paintWork'>
                                     <p className='h-full w-full'>Painting Work</p>
                                 </NavLink>
                                 
@@ -75,7 +77,7 @@ export class Body extends Component {
                                         <FaceIcon className="text-lg " />
                                     </IconWrapper>
                                     } >
-                                <NavLink to='/faceArt'>
+                                <NavLink to='/body/faceArt'>
                                     <p className='h-full w-full'>Face Art</p>
                                 </NavLink>
                             </ListboxItem>
@@ -88,7 +90,7 @@ export class Body extends Component {
                                     </IconWrapper>
                                     } 
                                 >
-                                <NavLink to='/wallArt'>
+                                <NavLink to='/body/wallArt'>
                                     <p className='h-full w-full'>Wall Art</p>
                                 </NavLink>
                             </ListboxItem>
@@ -104,7 +106,6 @@ export class Body extends Component {
                         </Listbox>
                         <div className='basis-1/12 text-xs text-center pb-2 content-end text-gray-500'>Artist Content Management System.</div>
                     </div>
-                    {console.log('check token : ' + this.state.jwtToken)}
                     <Outlet context={{ jwtToken: this.state.jwtToken, setJwtToken: this.props.setJwtToken }} className='bg-gray-200'></Outlet>
                     
                 </div>
