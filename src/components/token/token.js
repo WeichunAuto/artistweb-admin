@@ -15,17 +15,17 @@ async function requestToken(app) {
       appKey: app.appKey
     })
 
-    const jwtObject = response.data;
-
-    isSuccess = true;
-    token = jwtObject.token;
-    msg = 'success';
+    const statusCode = response.status
+    // console.log('response code：', statusCode)
+    if(statusCode === 200) {
+      const jwtObject = response.data;
+      [isSuccess, token, msg] = [true, jwtObject.token, 'success']
+    } else if(statusCode === 401) {
+      [isSuccess, token, msg] = [false, '', 'Invalid Credentials']
+    }
 
   } catch(error) {
     console.log('Login token request error:', error);
-    isSuccess = false;
-    token = '';
-    msg = 'Invalid Credentials';
   }
   
   return {isSuccess, token, msg}

@@ -57,14 +57,20 @@ function ModalForm(props) {
                 'Authorization': 'Bearer ' + token
               },
         }).then((response) => {
-            console.log("paintWork added successfully:", response.data);
-            if(!response.data) { // normally, token is invalid, then require to login.
-                console.log('token is invalid!')
-                setIsTokenValid(false)
-            } else {
+
+            console.log(response)
+            const statusCode = response.status
+            console.log('response 状态码：', statusCode)
+            if(statusCode === undefined && response.code === 'ERR_NETWORK') { // TODO: Consider this is due to exceeding the max upload size.
                 setIsTokenValid(true)
-                console.log(response.data)
+            } else {
+                if(statusCode === 200) {
+                    setIsTokenValid(true)
+                } else if(statusCode === 401) {
+                    setIsTokenValid(false)
+                }
             }
+            
         }).catch((error) => {
             console.error("Error adding product:", error);
           });

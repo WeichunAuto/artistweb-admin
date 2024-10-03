@@ -12,20 +12,22 @@ const ProtectedRoute = ({element}) => {
             setIsAuthenticated(false)
         } else {
             const token = atob(cacheToken)  // base64 decode token after getting from local storage.
-            // alert(token)
             axiosInstance.post('/isTokenValid', {}, {
                 headers: {
                     'Authorization': 'Bearer ' + token
                 }
             })
             .then((response) => {
-                const isTokenValid = response.data
-                if(isTokenValid) {
+                const statusCode = response.status
+                console.log(response)
+                
+                if(statusCode === 200) {
                     setIsAuthenticated(true)
-                } else {
+                    console.log('protected route token response : ', response.data)
+                } else if(statusCode === 401) { // Token is invalid.
                     setIsAuthenticated(false)
+                    console.log('protected route token response : ', response.response.data)
                 }
-                console.log('protected route token response : ', isTokenValid)
             })
             .catch((error) => {
                 console.log('protected route token error : ', error)
