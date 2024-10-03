@@ -1,5 +1,4 @@
-import React from "react"
-import { useOutletContext } from 'react-router-dom'
+import React, { useState, useEffect } from "react"
 
 import {
   Table,
@@ -33,6 +32,16 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["TITLE", "DESCRIPTION", "PRICE", "STATUS", "DATE", "ACTIONS"];
 
 export default function PaintWork() {
+  const [token, setToken] = useState(null)
+
+  useEffect(() => {
+    const cacheToken = localStorage.getItem('token')
+    if(cacheToken !== null) {
+      const decodedToken = atob(cacheToken)  // base64 decode token after getting from local storage.
+      setToken(decodedToken)
+    }
+  }, [])
+
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -42,10 +51,6 @@ export default function PaintWork() {
     column: "PRICE",
     direction: "ascending",
   });
-
-  const { jwtToken, setJwtToken } = useOutletContext();
-
-  console.log('token from body = ' + jwtToken)
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modal to upload a new paint work.
   const [page, setPage] = React.useState(1);
@@ -62,9 +67,7 @@ export default function PaintWork() {
     let filteredUsers = [...users];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
+      filteredUsers = filteredUsers.filter((user) => user.title.includes(filterValue))
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
       filteredUsers = filteredUsers.filter((user) =>
@@ -73,7 +76,7 @@ export default function PaintWork() {
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [filterValue, statusFilter, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -253,9 +256,11 @@ export default function PaintWork() {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    users.length,
+    // users.length,
     onSearchChange,
-    hasSearchFilter,
+    // hasSearchFilter,
+    onClear,  
+    onOpen
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -286,7 +291,12 @@ export default function PaintWork() {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, 
+    page, pages, 
+    filteredItems.length,
+    onNextPage,
+    onPreviousPage,
+  ]);
 
   return (
     <>
@@ -338,7 +348,7 @@ export default function PaintWork() {
       } 
       isOpen={isOpen} 
       onOpenChange={onOpenChange} 
-      tokenControl = {{ jwtToken, setJwtToken }}
+      token = {token}
       />
     </>
   );

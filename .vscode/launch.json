@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "chrome", // Use "pwa-edge" if using Edge
+        "request": "launch",
+        "name": "Launch Chrome against localhost",
+        "url": "http://localhost:3000", // URL where your app is running
+        "webRoot": "${workspaceFolder}/src",
+        "sourceMaps": true,
+        "trace": true, // Enable this for more verbose output
+        "skipFiles": ["<node_internals>/**"] // Skip unnecessary internal code
+      }
+    ]
+  }
+  

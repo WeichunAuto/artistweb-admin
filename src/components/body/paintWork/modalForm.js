@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import axiosInstance from '../../axios/request';
+import { Navigate } from 'react-router-dom';
 import {
     Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Switch, Card, CardBody, Button,
     Input, Textarea
@@ -11,9 +12,11 @@ import {
  * @returns 
  */
 function ModalForm(props) {
-    const {fields, isOpen, onOpenChange, tokenControl} = props
+    const {fields, isOpen, onOpenChange, token} = props
 
-    const [image, setImage] = useState(null);
+    const [isTokenValid, setIsTokenValid] = useState(null)
+
+    const [image, setImage] = useState(null)
 
     const [paintWork, setPaintWork] = useState({
         title: '',
@@ -51,116 +54,120 @@ function ModalForm(props) {
         axiosInstance.post('/addPaintWork', formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
-                'Authorization': 'Bearer ' + tokenControl.jwtToken
+                'Authorization': 'Bearer ' + token
               },
         }).then((response) => {
             console.log("paintWork added successfully:", response.data);
             if(!response.data) { // normally, token is invalid, then require to login.
-                tokenControl.setJwtToken(null)
+                console.log('token is invalid!')
+                setIsTokenValid(false)
+            } else {
+                setIsTokenValid(true)
+                console.log(response.data)
             }
-        
         }).catch((error) => {
             console.error("Error adding product:", error);
           });
     }
+    if(isTokenValid === false) {
+        return <Navigate to='/login'/>
+    } else {
+        return  <Modal
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    placement="top-center"
+                    isDismissable={false}
+                    size='2xl'
+                >
+                    <ModalContent className="px-2">
+                    {(onClose) => (
+                        <>
+                        <ModalHeader className="flex flex-col gap-1">Add a New Painting Work</ModalHeader>
+                        <ModalBody>
+                            {fields.title &&
+                                <Input
+                                    isRequired
+                                    autoFocus
+                                    label="title"
+                                    name="title"
+                                    placeholder="Give a title for your painting"
+                                    value = {paintWork.title}
+                                    onChange={handleInputChange}
+                                    // variant="bordered"
+                                />
+                            }
+                            {fields.description &&
+                                <Textarea
+                                    label="description"
+                                    name="description"
+                                    placeholder="You can say something about your work."
+                                    value = {paintWork.description}
+                                    onChange={handleInputChange}
+                                />
+                            }
+                            {fields.price &&
+                                <Input
+                                    type="number"
+                                    label="price"
+                                    name="price"
+                                    placeholder="0.00"
+                                    className="basis-1/2"
+                                    value = {paintWork.price}
+                                    onChange={handleInputChange}
+                                    startContent={
+                                        <div className="pointer-events-none flex items-center">
+                                            <span className="text-default-400 text-small">$</span>
+                                        </div>
+                                    }
+                                />
+                            }
+                            {fields.img &&
+                                <Card shadow='sm'>
+                                    <CardBody className='w-full flex flex-col'>
+                                        <p className="w-full text-xs text-gray-500">upload an image</p>
+                                        <div className="w-full flex flex-row justify-between items-center">
+                                        <div className="col-span-2">
+                                            {image && <div className="text-gray-700">{image.name}</div>}
+                                        </div>
 
-    return (
-        <Modal
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            placement="top-center"
-            isDismissable={false}
-            size='2xl'
-        >
-            <ModalContent className="px-2">
-            {(onClose) => (
-                <>
-                <ModalHeader className="flex flex-col gap-1">Add a New Painting Work</ModalHeader>
-                <ModalBody>
-                    {fields.title &&
-                        <Input
-                            isRequired
-                            autoFocus
-                            label="title"
-                            name="title"
-                            placeholder="Give a title for your painting"
-                            value = {paintWork.title}
-                            onChange={handleInputChange}
-                            // variant="bordered"
-                        />
-                    }
-                    {fields.description &&
-                        <Textarea
-                            label="description"
-                            name="description"
-                            placeholder="You can say something about your work."
-                            value = {paintWork.description}
-                            onChange={handleInputChange}
-                        />
-                    }
-                    {fields.price &&
-                        <Input
-                            type="number"
-                            label="price"
-                            name="price"
-                            placeholder="0.00"
-                            className="basis-1/2"
-                            value = {paintWork.price}
-                            onChange={handleInputChange}
-                            startContent={
-                                <div className="pointer-events-none flex items-center">
-                                    <span className="text-default-400 text-small">$</span>
+                                        <input
+                                            type="file"
+                                            id="file-upload"
+                                            style={{ display: "none" }}
+                                            onChange={handleImageChange}
+                                        />
+                                        <label htmlFor="file-upload">
+                                            <Button as="span" color="primary" auto size="sm">
+                                                Choose Image
+                                            </Button>
+                                        </label>
+                                        </div>
+                                    </CardBody>
+                                </Card>
+                            }
+                            {fields.active &&
+                                <div className="grid gap-0  justify-items-end">
+                                    <Switch size='sm' name='status' value={paintWork.status} isSelected={paintWork.status} onChange={handleInputChange}>
+                                        Active
+                                    </Switch>
+                                    <p className="text-sm text-default-500">Selected: {paintWork.status ? "true" : "false"}</p>
                                 </div>
                             }
-                        />
-                    }
-                    {fields.img &&
-                        <Card shadow='sm'>
-                            <CardBody className='w-full flex flex-col'>
-                                <p className="w-full text-xs text-gray-500">upload an image</p>
-                                <div className="w-full flex flex-row justify-between items-center">
-                                <div className="col-span-2">
-                                    {image && <div className="text-gray-700">{image.name}</div>}
-                                </div>
-
-                                <input
-                                    type="file"
-                                    id="file-upload"
-                                    style={{ display: "none" }}
-                                    onChange={handleImageChange}
-                                />
-                                <label htmlFor="file-upload">
-                                    <Button as="span" color="primary" auto size="sm">
-                                        Choose Image
-                                    </Button>
-                                </label>
-                                </div>
-                            </CardBody>
-                        </Card>
-                    }
-                    {fields.active &&
-                        <div className="grid gap-0  justify-items-end">
-                            <Switch size='sm' name='status' value={paintWork.status} isSelected={paintWork.status} onChange={handleInputChange}>
-                                Active
-                            </Switch>
-                            <p className="text-sm text-default-500">Selected: {paintWork.status ? "true" : "false"}</p>
-                        </div>
-                    }
-                </ModalBody>
-                
-                <ModalFooter className="pt-20">
-                    <Button color="danger" variant="flat" onPress={onClose}>
-                    Close
-                    </Button>
-                    <Button color="primary" onPress={submitHandler}>
-                    Confirm
-                    </Button>
-                </ModalFooter>
-                </>
-            )}
-            </ModalContent>
-        </Modal>
-    )
+                        </ModalBody>
+                        
+                        <ModalFooter className="pt-20">
+                            <Button color="danger" variant="flat" onPress={onClose}>
+                            Close
+                            </Button>
+                            <Button color="primary" onPress={submitHandler}>
+                            Confirm
+                            </Button>
+                        </ModalFooter>
+                        </>
+                    )}
+                    </ModalContent>
+                </Modal>
+    }
 }
 
 export default ModalForm

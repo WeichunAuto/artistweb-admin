@@ -1,6 +1,7 @@
-import React, {useReducer} from 'react'
+import React, {useReducer, useState} from 'react'
 import SHA256 from 'crypto-js/sha256';
 import JwtToken from '../token/token'
+import { Navigate } from 'react-router-dom';
 
 export default function Login(props) {
 
@@ -8,7 +9,8 @@ export default function Login(props) {
         appName: '',
         appKey: ''
     }
-
+    const [errorMsg, setErrorMsg] = useState('')
+    const [isRedirect, setIsRedirect] = useState(false)
     const [state, dispatch] = useReducer(hashOrSubmitHandler, initState)
 
     function changeForm(e) {
@@ -21,9 +23,14 @@ export default function Login(props) {
         const {appName, appKey} = state
         const hashedAppKey= SHA256(appKey).toString()
         
-        const jwtToken = await JwtToken.getToken({appName: appName, appKey: hashedAppKey})
-        
-        props.setJwtToken(jwtToken)
+        const {isSuccess, token, msg} = await JwtToken.getToken({appName: appName, appKey: hashedAppKey})
+        if(isSuccess === true) {
+          const base64Token = btoa(token)
+          localStorage.setItem('token', base64Token) // Save token with Base64 encode.
+          setIsRedirect(true)
+        } else {
+          setErrorMsg(msg)
+        }
     }
 
     function hashOrSubmitHandler(state, action) {
@@ -37,6 +44,11 @@ export default function Login(props) {
             default:
                 return state
         }
+    }
+
+    if (isRedirect) {
+      // alert(isRedirect)
+      return <Navigate to="/" />; // Navigate after successful login
     }
 
     return (
@@ -73,7 +85,6 @@ export default function Login(props) {
                   <label htmlFor="appKey" className="block text-sm font-medium leading-6 text-gray-900">
                     Password
                   </label>
-                  
                 </div>
                 <div className="mt-2">
                   <input
@@ -86,6 +97,11 @@ export default function Login(props) {
                     className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     onChange={changeForm }
                   />
+                </div>
+                <div className="flex items-center justify-between">
+                  <label htmlFor="appKey" className="block text-sm font-medium leading-6 text-red-600">
+                    {errorMsg}
+                  </label>
                 </div>
               </div>
   

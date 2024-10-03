@@ -1,29 +1,35 @@
 import axiosInstance from '../axios/request'
 
-
 let jwtToken = {
   getToken: async function(app) {
-    jwtToken = await requestToken(app); // Wait for the token to be retrieved asynchronously
-    // console.log('New jwtToken:', jwtToken);
-    return jwtToken
+    return await requestToken(app); // Wait for the token to be retrieved asynchronously
   }
 } 
 
 // Asynchronous request
 async function requestToken(app) {
-    
-    try {
-      const jwtRes = await axiosInstance.post('/login', {
-        appName: app.appName,
-        appKey: app.appKey
-      })
-      const jwtObject = jwtRes.data
+  let [isSuccess, token, msg] = [false, '', '']
+  try {
+    const response = await axiosInstance.post('/login', {
+      appName: app.appName,
+      appKey: app.appKey
+    })
 
-      return jwtObject.token
-    } catch (error) {
-      console.log('login token request error.....')
-      return null
-    }
+    const jwtObject = response.data;
+
+    isSuccess = true;
+    token = jwtObject.token;
+    msg = 'success';
+
+  } catch(error) {
+    console.log('Login token request error:', error);
+    isSuccess = false;
+    token = '';
+    msg = 'Invalid Credentials';
   }
+  
+  return {isSuccess, token, msg}
+   
+}
 
-  export default jwtToken
+export default jwtToken

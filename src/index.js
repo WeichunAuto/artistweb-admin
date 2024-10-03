@@ -7,20 +7,34 @@ import PaintWork from './components/body/paintWork'
 import FaceArt from './components/body/faceArt'
 import WallArt from './components/body/wallArt';
 import Body from './components/body'
-
+import Login from './components/login';
 import App from './App';
 import Error from './components/body/error';
+import ProtectedRoute from './components/protectedRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App/>,
+        element: (
+            <ProtectedRoute
+                element={<App />} 
+            />
+        ),
+        errorElement: <Error />
+    },
+    {
+        path: '/login',
+        element: <Login />,
     },
     {
         path: '/body',
-        element: <Body />,
+        element: (
+            <ProtectedRoute
+                element={<Body />} 
+            />
+        ),
         children: [
             {
                 index: true, // default rendered children component.

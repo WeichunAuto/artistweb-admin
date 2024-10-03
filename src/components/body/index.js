@@ -4,46 +4,11 @@ import {IconWrapper} from "../../icons/iconWrapper";
 import { ItemCounter } from "./itemCounter";
 import {BookIcon, FaceIcon, WallIcon} from '../../icons/icons'
 import { NavLink, Outlet } from 'react-router-dom'
-import App from '../../App'
 
 export class Body extends Component {
-    state = {
-        jwtToken: null
-    }
-
-    componentDidMount() {
-        // localStorage.clear('token')
-        const cacheToken = localStorage.getItem('token')
-
-        if(cacheToken === null) {
-
-        } else {
-            const token = atob(cacheToken)  // base64 decode token after getting from local storage.
-
-            if (token === 'null') {
-                const setJwtToken = this.props.setJwtToken
-                if(setJwtToken) {
-                    setJwtToken(null)  // return to the login page
-                } else {} 
-            } else {            
-                this.setState({
-                    jwtToken: token
-                })
-            }
-        }
-    }
-
-    handleRequestWithToken = async (token) => {
-        alert(2)
-        console.log('here is the token:')
-        console.log(token)
-    }
 
     render() {
         return (
-                this.state.jwtToken === null 
-                ? <App/>
-                :
                 <div className='flex gap-2 h-screen'>
                     <div className='flex flex-col min-w-[250px] max-w-[300px] '>
                         <Listbox
@@ -106,8 +71,7 @@ export class Body extends Component {
                         </Listbox>
                         <div className='basis-1/12 text-xs text-center pb-2 content-end text-gray-500'>Artist Content Management System.</div>
                     </div>
-                    <Outlet context={{ jwtToken: this.state.jwtToken, setJwtToken: this.props.setJwtToken }} className='bg-gray-200'></Outlet>
-                    
+                    <Outlet className='bg-gray-200'></Outlet>
                 </div>
         )
     }
