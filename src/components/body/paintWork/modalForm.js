@@ -12,7 +12,7 @@ import {
  * @returns 
  */
 function ModalForm(props) {
-    const {fields, isOpen, onOpenChange, token} = props
+    const {fields, isOpen, onOpenChange} = props
 
     const [isTokenValid, setIsTokenValid] = useState(null)
 
@@ -47,7 +47,7 @@ function ModalForm(props) {
 
     const submitHandler = (e) =>{
         const {title, price} = paintWork
-        
+
         if(title.trim() === '') {
             setErrorMsg('Please input the title.')
             return
@@ -76,8 +76,7 @@ function ModalForm(props) {
           );
         axiosInstance.post('/addPaintWork', formData, {
             headers: {
-                "Content-Type": "multipart/form-data",
-                'Authorization': 'Bearer ' + token
+                "Content-Type": "multipart/form-data"
               },
         }).then((response) => {
 
@@ -89,6 +88,14 @@ function ModalForm(props) {
             } else {
                 if(statusCode === 201) {
                     setIsTokenValid(true)
+                    const emptyForm = {
+                        title: '',
+                        description: '',
+                        price: '',
+                        status: true
+                    }
+                    setPaintWork(emptyForm)
+                    setImage(null)
                     onOpenChange()
                 } else if(statusCode === 401) {
                     setIsTokenValid(false)

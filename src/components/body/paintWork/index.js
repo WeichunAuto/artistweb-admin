@@ -32,14 +32,14 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["TITLE", "DESCRIPTION", "PRICE", "STATUS", "DATE", "ACTIONS"];
 
 export default function PaintWork() {
-  const [token, setToken] = useState(null)
+  // const [token, setToken] = useState(null)
 
   useEffect(() => {
-    const cacheToken = localStorage.getItem('token')
-    if(cacheToken !== null) {
-      const decodedToken = atob(cacheToken)  // base64 decode token after getting from local storage.
-      setToken(decodedToken)
-    }
+    // const cacheToken = localStorage.getItem('token')
+    // if(cacheToken !== null) {
+    //   const decodedToken = atob(cacheToken)  // base64 decode token after getting from local storage.
+    //   setToken(decodedToken)
+    // }
   }, [])
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -349,7 +349,6 @@ export default function PaintWork() {
       } 
       isOpen={isOpen} 
       onOpenChange={onOpenChange} 
-      token = {token}
       />
     </>
   );

@@ -10,7 +10,14 @@ const axiosInstance = axios.create({
 // interceptor API requests to process token
 axiosInstance.interceptors.request.use((config) => {
 
-    if (config.url !== '/login') {}
+    if (config.url !== '/login') {
+        const cacheToken = localStorage.getItem('token')
+        if(cacheToken !== null) {
+        const decodedToken = atob(cacheToken)  // base64 decode token after getting from local storage.
+
+        config.headers.Authorization = 'Bearer ' + decodedToken
+        }
+    }
     return config
 }, error => {
     return error
