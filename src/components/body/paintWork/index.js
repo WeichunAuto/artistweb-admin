@@ -53,6 +53,7 @@ export default function PaintWork() {
   });
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modal to upload a new paint work.
+
   const [page, setPage] = React.useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
@@ -181,7 +182,7 @@ export default function PaintWork() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Search by title..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}

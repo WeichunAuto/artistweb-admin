@@ -16,6 +16,8 @@ function ModalForm(props) {
 
     const [isTokenValid, setIsTokenValid] = useState(null)
 
+    const [errorMsg, setErrorMsg] = useState('')
+
     const [image, setImage] = useState(null)
 
     const [paintWork, setPaintWork] = useState({
@@ -44,7 +46,28 @@ function ModalForm(props) {
     }
 
     const submitHandler = (e) =>{
-        console.log(paintWork)
+        const {title, price} = paintWork
+        
+        if(title.trim() === '') {
+            setErrorMsg('Please input the title.')
+            return
+        }
+        if(price === '') {
+            setErrorMsg('Please give a price.')
+            return
+        }
+        if(image === null) {
+            setErrorMsg('You also need to choose a piece of your artwork.')
+            return
+        } else if(!image.type.startsWith('image')) {
+            setErrorMsg('You can only upload image files.')
+            return
+        }else if(image.size >= 9999500){
+            
+            setErrorMsg('The maximum image size should be less than 10MB.')
+            return
+        }
+
         const formData = new FormData();
         formData.append("imageFile", image);
         formData.append(
@@ -60,12 +83,13 @@ function ModalForm(props) {
 
             console.log(response)
             const statusCode = response.status
-            console.log('response 状态码：', statusCode)
+            console.log('response state code：', statusCode)
             if(statusCode === undefined && response.code === 'ERR_NETWORK') { // TODO: Consider this is due to exceeding the max upload size.
                 setIsTokenValid(true)
             } else {
-                if(statusCode === 200) {
+                if(statusCode === 201) {
                     setIsTokenValid(true)
+                    onOpenChange()
                 } else if(statusCode === 401) {
                     setIsTokenValid(false)
                 }
@@ -159,6 +183,8 @@ function ModalForm(props) {
                                     <p className="text-sm text-default-500">Selected: {paintWork.status ? "true" : "false"}</p>
                                 </div>
                             }
+                            {/* Error tips */}
+                            <div className='w-full h-10 text-left text-red-600'>{errorMsg}</div>
                         </ModalBody>
                         
                         <ModalFooter className="pt-20">
