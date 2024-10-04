@@ -70,9 +70,11 @@ function ModalForm(props) {
 
         const formData = new FormData();
         formData.append("imageFile", image);
+
+        const paintStatus = paintWork.status ? 'active' : 'paused'
         formData.append(
             "paintWork",
-            new Blob([JSON.stringify(paintWork)], { type: "application/json" })
+            new Blob([JSON.stringify({...paintWork, status: paintStatus})], { type: "application/json" })
           );
         axiosInstance.post('/addPaintWork', formData, {
             headers: {
@@ -187,7 +189,7 @@ function ModalForm(props) {
                                     <Switch size='sm' name='status' value={paintWork.status} isSelected={paintWork.status} onChange={handleInputChange}>
                                         Active
                                     </Switch>
-                                    <p className="text-sm text-default-500">Selected: {paintWork.status ? "true" : "false"}</p>
+                                    <p className="text-sm text-default-500">Selected: {paintWork.status ? "active" : "paused"}</p>
                                 </div>
                             }
                             {/* Error tips */}

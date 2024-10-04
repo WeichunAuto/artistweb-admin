@@ -20,8 +20,9 @@ import {
 } from "@nextui-org/react";
 import { PlusIcon, SearchIcon, VerticalDotsIcon, ChevronDownIcon } from "../../../icons/icons";
 import ModalForm from './modalForm'
-import { columns, users, statusOptions } from "./data";
+import { columns, statusOptions } from "./data";
 import { capitalize } from "../../utils";
+import axiosInstance from "../../axios/request";
 
 const statusColorMap = {
   active: "success",
@@ -32,15 +33,18 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["TITLE", "DESCRIPTION", "PRICE", "STATUS", "DATE", "ACTIONS"];
 
 export default function PaintWork() {
-  // const [token, setToken] = useState(null)
+  const [isPaintWorksDataFetched, setIsPaintWorksDataFetched] = useState(false)
+  const [paintWorksData, setPaintWorksData] = useState([])
 
   useEffect(() => {
-    // const cacheToken = localStorage.getItem('token')
-    // if(cacheToken !== null) {
-    //   const decodedToken = atob(cacheToken)  // base64 decode token after getting from local storage.
-    //   setToken(decodedToken)
-    // }
-  }, [])
+    if(isPaintWorksDataFetched === false) {
+      (async () => {
+        const response = await axiosInstance.get('/fetchPaintWorks')
+        setPaintWorksData(response.data)
+        // setIsPaintWorksDataFetched(true)
+      })();
+    }
+  }, [isPaintWorksDataFetched])
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -65,7 +69,7 @@ export default function PaintWork() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = [...paintWorksData];
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) => user.title.includes(filterValue))
@@ -77,7 +81,7 @@ export default function PaintWork() {
     }
 
     return filteredUsers;
-  }, [filterValue, statusFilter, hasSearchFilter]);
+  }, [paintWorksData, filterValue, statusFilter, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -116,12 +120,12 @@ export default function PaintWork() {
         return (
           <p className="text-bold text-small capitalize max-w-[300px] line-clamp-2">{cellValue}</p>
         );
-      case "STATUS":
+      case "STATUS": 
         return (
           <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
             {cellValue}
           </Chip>
-        );
+        ); 
       case "ACTIONS":
         return (
           <div className="relative flex justify-end items-center gap-2">
@@ -237,7 +241,7 @@ export default function PaintWork() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {users.length} users</span>
+          <span className="text-default-400 text-small">Total {paintWorksData.length} paintWorks</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -257,9 +261,8 @@ export default function PaintWork() {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    // users.length,
+    paintWorksData.length,
     onSearchChange,
-    // hasSearchFilter,
     onClear,  
     onOpen
   ]);
@@ -309,7 +312,7 @@ export default function PaintWork() {
         classNames={{
           wrapper: "max-h-[582px]",
         }}
-        className=" h-full pt-4 px-4"
+        className=" h-full pt-4 pl-2 pr-4"
         selectedKeys={selectedKeys}
         selectionMode="single"
         sortDescriptor={sortDescriptor}
@@ -329,7 +332,7 @@ export default function PaintWork() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No users found"} items={sortedItems}>
+        <TableBody emptyContent={"No works found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
