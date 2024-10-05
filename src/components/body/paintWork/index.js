@@ -33,18 +33,44 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["TITLE", "DESCRIPTION", "PRICE", "STATUS", "DATE", "ACTIONS"];
 
 export default function PaintWork() {
-  const [isPaintWorksDataFetched, setIsPaintWorksDataFetched] = useState(false)
-  const [paintWorksData, setPaintWorksData] = useState([])
+  const [isMainDataFetched, setIsMainDataFetched] = useState(false)
+  const [mainData, setMainData] = useState([])
+  const [artWorks, setArtWorks] = useState([])
 
   useEffect(() => {
-    if(isPaintWorksDataFetched === false) {
+    if(isMainDataFetched === false) {
       (async () => {
         const response = await axiosInstance.get('/fetchPaintWorks')
-        setPaintWorksData(response.data)
-        // setIsPaintWorksDataFetched(true)
+        setMainData(response.data)
       })();
     }
-  }, [isPaintWorksDataFetched])
+  }, [isMainDataFetched])
+
+  useEffect(() => {
+    if(mainData.length > 0) {
+      (async () => {
+        const updatedMainData = await Promise.all(
+          mainData.map(async (aPaintWork) => {
+            try {
+              const response = await axiosInstance.get(`/getAPaintWork/${aPaintWork.id}/image`, {responseType: "blob"})
+              
+              const imageURL = URL.createObjectURL(response.data);
+              return { ...aPaintWork, imageURL }
+            } catch (error) {
+              console.error(
+                "Error fetching image for aPaintWork ID:",
+                aPaintWork.id,
+                error
+              );
+              return { ...aPaintWork, imageUrl: "" };
+            }
+          })
+        )
+        setArtWorks(updatedMainData)
+      })()
+    }
+
+  }, [mainData])
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -52,7 +78,7 @@ export default function PaintWork() {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "PRICE",
+    column: "DATE",
     direction: "ascending",
   });
 
@@ -69,7 +95,7 @@ export default function PaintWork() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...paintWorksData];
+    let filteredUsers = [...artWorks];
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) => user.title.includes(filterValue))
@@ -81,7 +107,7 @@ export default function PaintWork() {
     }
 
     return filteredUsers;
-  }, [paintWorksData, filterValue, statusFilter, hasSearchFilter]);
+  }, [artWorks, filterValue, statusFilter, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -104,16 +130,17 @@ export default function PaintWork() {
 
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey.toLowerCase()];
+    // console.log(user.imageURL)
 
     switch (columnKey) {
       case "TITLE":
         return (
           <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.name}
+            avatarProps={{ radius: "lg", src: user.imageURL }}
+            description={user.title}
             name={cellValue}
           >
-            {user.name}
+            {user.title}
           </User>
         );
       case "DESCRIPTION":
@@ -182,6 +209,7 @@ export default function PaintWork() {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
+        {/* <img src={artWorks[0].imageURL}/> */}
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
@@ -241,7 +269,7 @@ export default function PaintWork() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {paintWorksData.length} paintWorks</span>
+          <span className="text-default-400 text-small">Total {artWorks.length} paintWorks</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -249,8 +277,8 @@ export default function PaintWork() {
               onChange={onRowsPerPageChange}
             >
               <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
+              <option value="8">8</option>
+              <option value="12">12</option>
             </select>
           </label>
         </div>
@@ -261,7 +289,7 @@ export default function PaintWork() {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    paintWorksData.length,
+    artWorks.length,
     onSearchChange,
     onClear,  
     onOpen
