@@ -12,13 +12,15 @@ import {
  * @returns 
  */
 function ModalForm(props) {
-    const {fields, isOpen, onOpenChange} = props
+    const {fields, isOpen, onOpenChange, onTipsOpenChange, setIsMainDataFetched} = props
 
     const [isTokenValid, setIsTokenValid] = useState(null)
 
     const [errorMsg, setErrorMsg] = useState('')
 
     const [image, setImage] = useState(null)
+
+    const [isLoading, setIsLoading] = useState(false)
 
     const [paintWork, setPaintWork] = useState({
         title: '',
@@ -46,6 +48,7 @@ function ModalForm(props) {
     }
 
     const submitHandler = (e) =>{
+        setIsLoading(true)
         const {title, price} = paintWork
 
         if(title.trim() === '') {
@@ -98,7 +101,10 @@ function ModalForm(props) {
                     }
                     setPaintWork(emptyForm)
                     setImage(null)
-                    onOpenChange()
+                    setIsLoading(false)
+                    onOpenChange() // close this form.
+                    onTipsOpenChange() // pop up tips window.
+                    setIsMainDataFetched(false) // refresh the main data.
                 } else if(statusCode === 401) {
                     setIsTokenValid(false)
                 }
@@ -200,7 +206,7 @@ function ModalForm(props) {
                             <Button color="danger" variant="flat" onPress={onClose}>
                             Close
                             </Button>
-                            <Button color="primary" onPress={submitHandler}>
+                            <Button color="primary" isLoading={isLoading} onPress={submitHandler}>
                             Confirm
                             </Button>
                         </ModalFooter>

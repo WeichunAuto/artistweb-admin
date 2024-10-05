@@ -23,6 +23,7 @@ import ModalForm from './modalForm'
 import { columns, statusOptions } from "./data";
 import { capitalize } from "../../utils";
 import axiosInstance from "../../axios/request";
+import Tips from "../tips";
 
 const statusColorMap = {
   active: "success",
@@ -42,6 +43,7 @@ export default function PaintWork() {
       (async () => {
         const response = await axiosInstance.get('/fetchPaintWorks')
         setMainData(response.data)
+        setIsMainDataFetched(true)
       })();
     }
   }, [isMainDataFetched])
@@ -78,11 +80,14 @@ export default function PaintWork() {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "DATE",
-    direction: "ascending",
+    // column: "DATE",
+    // direction: "descending",
+    column: "",
+    direction: "",
   });
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modal to upload a new paint work.
+  const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modalForm to upload a new paint work.
+  const { isOpen: isTipsOpen, onOpenChange: onTipsOpenChange } = useDisclosure(); // manage the state of opening a Tops.
 
   const [page, setPage] = React.useState(1);
 
@@ -292,7 +297,7 @@ export default function PaintWork() {
     artWorks.length,
     onSearchChange,
     onClear,  
-    onOpen
+    onOpen,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -379,8 +384,12 @@ export default function PaintWork() {
         }
       } 
       isOpen={isOpen} 
-      onOpenChange={onOpenChange} 
+      onOpenChange={onOpenChange} // control to close the modalForm after adding a new paintWork.
+      onTipsOpenChange = {onTipsOpenChange} // control to pop up the tips window.
+      setIsMainDataFetched={setIsMainDataFetched} // control to excute the useEffect() method to refresh the main data.
       />
+
+      <Tips isTipsOpen={isTipsOpen} onTipsOpenChange={onTipsOpenChange} tips='Congratulations, A New Work Was Successfully Added!'/>
     </>
   );
 }
