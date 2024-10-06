@@ -18,12 +18,13 @@ import {
   Pagination,
   useDisclosure
 } from "@nextui-org/react";
-import { PlusIcon, SearchIcon, VerticalDotsIcon, ChevronDownIcon } from "../../../icons/icons";
+import { PlusIcon, SearchIcon, ChevronDownIcon } from "../../../icons/icons";
 import ModalForm from './modalForm'
 import { columns, statusOptions } from "./data";
 import { capitalize } from "../../utils";
 import axiosInstance from "../../axios/request";
-import Tips from "../tips";
+import TipsPop from "../tipsPop";
+import WarnPop from "../warnPop"
 
 const statusColorMap = {
   active: "success",
@@ -87,7 +88,14 @@ export default function PaintWork() {
   });
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modalForm to upload a new paint work.
-  const { isOpen: isTipsOpen, onOpenChange: onTipsOpenChange } = useDisclosure(); // manage the state of opening a Tops.
+  const { isOpen: isTipsOpen, onOpenChange: onTipsOpenChange } = useDisclosure(); // manage the state of opening a Tips.
+  const {isOpen: isWarnOpen, onOpenChange: onWarnOpenChange } = useDisclosure(); // manage the state of opening a warn pop.
+  const [tipsMsg, setTipsMsg] = useState('')
+
+  const [dropItem, setDropItem] = useState({
+    id: -1,
+    title: ''
+  })
 
   const [page, setPage] = React.useState(1);
 
@@ -133,10 +141,20 @@ export default function PaintWork() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey.toLowerCase()];
-    // console.log(user.imageURL)
+  
 
+  const renderCell = React.useCallback((user, columnKey) => {
+
+    /**
+     * send a request to delete an item.
+     * @param {*} id 
+     */
+    const deleteItem = (id, title) => {
+      setDropItem({id, title})
+      onWarnOpenChange()
+    }
+
+    const cellValue = user[columnKey.toLowerCase()];
     switch (columnKey) {
       case "TITLE":
         return (
@@ -160,25 +178,16 @@ export default function PaintWork() {
         ); 
       case "ACTIONS":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="relative flex justify-center items-center gap-2">
+              <Button size='sm' variant="light">Edit</Button>
+              <Button size='sm' radius='full' color="primary" variant="flat">Preview</Button>
+              <Button size='sm' variant="light" onPress={() => deleteItem(user.id, user.title)}>Delete</Button>
           </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [onWarnOpenChange]); 
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -336,6 +345,7 @@ export default function PaintWork() {
   ]);
 
   return (
+    
     <>
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
@@ -356,9 +366,10 @@ export default function PaintWork() {
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
+            
             <TableColumn
               key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
+              align={column.uid === "ACTIONS" ? "center" : "left"}
               allowsSorting={column.sortable}
             >
               {column.name}
@@ -386,10 +397,13 @@ export default function PaintWork() {
       isOpen={isOpen} 
       onOpenChange={onOpenChange} // control to close the modalForm after adding a new paintWork.
       onTipsOpenChange = {onTipsOpenChange} // control to pop up the tips window.
+      setTipsMsg = {setTipsMsg}
       setIsMainDataFetched={setIsMainDataFetched} // control to excute the useEffect() method to refresh the main data.
       />
 
-      <Tips isTipsOpen={isTipsOpen} onTipsOpenChange={onTipsOpenChange} tips='Congratulations, A New Work Was Successfully Added!'/>
+      <TipsPop isTipsOpen={isTipsOpen} onTipsOpenChange={onTipsOpenChange} tips={tipsMsg} />
+
+      <WarnPop isWarnOpen={isWarnOpen} onWarnOpenChange={onWarnOpenChange} dropItem={dropItem} setIsMainDataFetched={setIsMainDataFetched}/>
     </>
   );
 }

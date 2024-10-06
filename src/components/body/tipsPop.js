@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter} from "@nextui-org/react";
 
 
-function Tips(props) {
+function TipsPop(props) {
     const {isTipsOpen, onTipsOpenChange, tips} = props
 
     useEffect(() => {
@@ -35,4 +35,4 @@ function Tips(props) {
     );
 }
 
-export default Tips
+export default TipsPop

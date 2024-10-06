@@ -12,7 +12,7 @@ import {
  * @returns 
  */
 function ModalForm(props) {
-    const {fields, isOpen, onOpenChange, onTipsOpenChange, setIsMainDataFetched} = props
+    const {fields, isOpen, onOpenChange, onTipsOpenChange, setTipsMsg, setIsMainDataFetched} = props
 
     const [isTokenValid, setIsTokenValid] = useState(null)
 
@@ -104,6 +104,7 @@ function ModalForm(props) {
                     setIsLoading(false)
                     onOpenChange() // close this form.
                     onTipsOpenChange() // pop up tips window.
+                    setTipsMsg('Congratulations, A New Work Was Successfully Added!')
                     setIsMainDataFetched(false) // refresh the main data.
                 } else if(statusCode === 401) {
                     setIsTokenValid(false)
