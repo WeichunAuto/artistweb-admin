@@ -35,7 +35,7 @@ export const WallIcon = (props) => (
   </svg>
 );
 
-export const PlusIcon = ({size = 24, width, height, ...props}) => (
+export const PlusIcon = ({ size = 24, width, height, ...props }) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -87,7 +87,7 @@ export const SearchIcon = (props) => (
   </svg>
 );
 
-export const ChevronDownIcon = ({strokeWidth = 1.5, ...otherProps}) => (
+export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -109,7 +109,7 @@ export const ChevronDownIcon = ({strokeWidth = 1.5, ...otherProps}) => (
   </svg>
 );
 
-export const VerticalDotsIcon = ({size = 24, width, height, ...props}) => (
+export const VerticalDotsIcon = ({ size = 24, width, height, ...props }) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -164,5 +164,20 @@ export const LockIcon = (props) => (
       d="M18.28 9.53V8.28C18.28 5.58 17.63 2 12 2C6.37 2 5.72 5.58 5.72 8.28V9.53C2.92 9.88 2 11.3 2 14.79V16.65C2 20.75 3.25 22 7.35 22H16.65C20.75 22 22 20.75 22 16.65V14.79C22 11.3 21.08 9.88 18.28 9.53ZM12 18.74C10.33 18.74 8.98 17.38 8.98 15.72C8.98 14.05 10.34 12.7 12 12.7C13.66 12.7 15.02 14.06 15.02 15.72C15.02 17.39 13.67 18.74 12 18.74ZM7.35 9.44C7.27 9.44 7.2 9.44 7.12 9.44V8.28C7.12 5.35 7.95 3.4 12 3.4C16.05 3.4 16.88 5.35 16.88 8.28V9.45C16.8 9.45 16.73 9.45 16.65 9.45H7.35V9.44Z"
       fill="currentColor"
     />
+  </svg>
+);
+
+
+export const PreviewIcon = (props) => (
+  <svg 
+    width="16px" 
+    height="16px" 
+    viewBox="0 0 1024 1024" 
+    class="icon" 
+    version="1.1" 
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+    >
+      <path d="M511.9 924.8C91.8 924.8 2.6 524.1 1.7 520.1L0 512l1.7-8.1c0.8-4 90-404.7 510.2-404.7s509.4 400.7 510.2 404.7l1.9 9.1-2.4 9c-0.9 4-110.5 402.8-509.7 402.8zM80.6 511.9c13.7 52.8 102.2 334.2 431.4 334.2 310.8 0 413.7-279.5 431.1-335.1-14.6-55.5-104.2-333.2-431.1-333.2-330.4 0-417.8 281-431.4 334.1z" fill="#3688FF" /><path d="M511.9 708.6c-108.4 0-196.6-88.2-196.6-196.6s88.2-196.6 196.6-196.6c21.7 0 39.3 17.6 39.3 39.3 0 21.7-17.6 39.3-39.3 39.3-65 0-117.9 52.9-117.9 117.9s52.9 117.9 117.9 117.9 118-52.8 118-117.8c0-24.8-7.6-48.5-21.9-68.5-12.7-17.7-8.6-42.2 9.1-54.9 17.7-12.7 42.2-8.6 54.8 9.1 24 33.5 36.6 73 36.6 114.3 0 108.4-88.2 196.6-196.6 196.6z" fill="#5F6379" />
   </svg>
 );

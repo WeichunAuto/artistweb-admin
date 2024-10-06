@@ -48,7 +48,7 @@ function ModalForm(props) {
     }
 
     const submitHandler = (e) =>{
-        setIsLoading(true)
+        
         const {title, price} = paintWork
 
         if(title.trim() === '') {
@@ -70,6 +70,7 @@ function ModalForm(props) {
             setErrorMsg('The maximum image size should be less than 10MB.')
             return
         }
+        setIsLoading(true)
 
         const formData = new FormData();
         formData.append("imageFile", image);

@@ -16,15 +16,17 @@ import {
   Chip,
   User,
   Pagination,
-  useDisclosure
+  useDisclosure,
+  Spacer
 } from "@nextui-org/react";
-import { PlusIcon, SearchIcon, ChevronDownIcon } from "../../../icons/icons";
+import { PlusIcon, SearchIcon, ChevronDownIcon, PreviewIcon } from "../../../icons/icons";
 import ModalForm from './modalForm'
 import { columns, statusOptions } from "./data";
 import { capitalize } from "../../utils";
 import axiosInstance from "../../axios/request";
 import TipsPop from "../tipsPop";
 import WarnPop from "../warnPop"
+import { ButtonGroup } from "react-bootstrap";
 
 const statusColorMap = {
   active: "success",
@@ -180,7 +182,15 @@ export default function PaintWork() {
         return (
           <div className="relative flex justify-center items-center gap-2">
               <Button size='sm' variant="light">Edit</Button>
-              <Button size='sm' radius='full' color="primary" variant="flat">Preview</Button>
+              <ButtonGroup>
+                <Button size='sm' radius='full' isIconOnly color="primary" variant="light">
+                  <PlusIcon size='16'/>
+                </Button>
+                <Spacer />
+                <Button size='sm' radius='full' isIconOnly color="primary" variant="light">
+                  <PreviewIcon />
+                </Button>
+              </ButtonGroup>
               <Button size='sm' variant="light" onPress={() => deleteItem(user.id, user.title)}>Delete</Button>
           </div>
         );
