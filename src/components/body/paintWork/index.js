@@ -399,7 +399,9 @@ export default function PaintWork() {
         {
           title: true,
           description: true,
+          year: true,
           price: true,
+          dimension: true,
           img: true,
           active: true
         }

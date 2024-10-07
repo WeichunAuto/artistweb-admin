@@ -3,9 +3,9 @@ import axiosInstance from '../../axios/request';
 import { Navigate } from 'react-router-dom';
 import {
     Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Switch, Card, CardBody, Button,
-    Input, Textarea
+    Input, Textarea 
 } from "@nextui-org/react"
-
+import {DatePicker} from "@nextui-org/date-picker";
 /**
  * This component is used for uploading new artwork.
  * @param {*} props 
@@ -25,7 +25,10 @@ function ModalForm(props) {
     const [paintWork, setPaintWork] = useState({
         title: '',
         description: '',
+        year: null,
         price: '',
+        dimensionWidth: '',
+        dimensionHeight: '',
         status: true
     })
 
@@ -39,26 +42,49 @@ function ModalForm(props) {
     }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        if (name !== 'status') {
-            setPaintWork({ ...paintWork, [name]: value });
+        // console.log(e)
+        // console.log(new Date(e).toLocaleDateString('en-GB'))
+        // console.log(new Date())
+
+        if(e.calendar) {
+            setPaintWork({ ...paintWork, year: e });
         } else {
-            setPaintWork({ ...paintWork, [name]: e.target.checked });
+            const { name, value } = e.target;
+            if (name !== 'status') {
+                setPaintWork({ ...paintWork, [name]: value });
+            } else {
+                setPaintWork({ ...paintWork, [name]: e.target.checked });
+            }
         }
+        
     }
 
     const submitHandler = (e) =>{
         
-        const {title, price} = paintWork
+        const {title, price, year, dimensionWidth, dimensionHeight} = paintWork
 
         if(title.trim() === '') {
             setErrorMsg('Please input the title.')
+            return
+        }
+        if(year === null) {
+            setErrorMsg('Please provide the year when you created the art work.')
+            return
+        }
+        if(dimensionWidth === '') {
+            setErrorMsg('Please give a size in width.')
+            return
+        }
+        console.log('dimensionHeight = ', dimensionHeight)
+        if(dimensionHeight === '') {
+            setErrorMsg('Please give a size in height.')
             return
         }
         if(price === '') {
             setErrorMsg('Please give a price.')
             return
         }
+
         if(image === null) {
             setErrorMsg('You also need to choose a piece of your artwork.')
             return
@@ -76,9 +102,11 @@ function ModalForm(props) {
         formData.append("imageFile", image);
 
         const paintStatus = paintWork.status ? 'active' : 'paused'
+        const yearStr = new Date(paintWork.year).toLocaleDateString('en-GB')
+
         formData.append(
             "paintWork",
-            new Blob([JSON.stringify({...paintWork, status: paintStatus})], { type: "application/json" })
+            new Blob([JSON.stringify({...paintWork, status: paintStatus, year: yearStr})], { type: "application/json" })
           );
         axiosInstance.post('/addPaintWork', formData, {
             headers: {
@@ -152,9 +180,53 @@ function ModalForm(props) {
                                     onChange={handleInputChange}
                                 />
                             }
+                            {fields.year &&
+                                <DatePicker 
+                                    label="year"
+                                    name="year"
+                                    isRequired
+                                    value = {paintWork.year}
+                                    onChange={handleInputChange}
+                                />
+                            }
+
+                            {fields.dimension &&
+                                <div className='flex flex-row'>
+                                    <Input 
+                                        type="number"
+                                        label="dimension - width"
+                                        name="dimensionWidth"
+                                        isRequired
+                                        placeholder="Please give a size in width."
+                                        value = {paintWork.dimensionWidth}
+                                        onChange={handleInputChange}
+                                        endContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">mm</span>
+                                            </div>
+                                        }
+                                    />
+                                    <Input 
+                                        type="number"
+                                        label="dimension - height"
+                                        name="dimensionHeight"
+                                        isRequired
+                                        placeholder="Please give a size in height."
+                                        value = {paintWork.dimensionHeight}
+                                        onChange={handleInputChange}
+                                        endContent={
+                                            <div className="pointer-events-none flex items-center">
+                                                <span className="text-default-400 text-small">mm</span>
+                                            </div>
+                                        }
+                                    />
+                                </div>
+                            }
+                            
                             {fields.price &&
                                 <Input
                                     type="number"
+                                    isRequired
                                     label="price"
                                     name="price"
                                     placeholder="0.00"
