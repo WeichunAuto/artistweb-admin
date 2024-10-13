@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './css/output.css'
 
+import AboutMe from './components/body/aboutMe';
 import PaintWork from './components/body/paintWork'
 import FaceArt from './components/body/faceArt'
 import WallArt from './components/body/wallArt';
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             {
                 path: 'wallArt',
                 Component: WallArt
+            },
+            {
+                path: 'aboutMe',
+                Component: AboutMe
             }
         ]
     },

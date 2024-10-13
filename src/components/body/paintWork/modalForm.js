@@ -42,10 +42,6 @@ function ModalForm(props) {
     }
 
     const handleInputChange = (e) => {
-        // console.log(e)
-        // console.log(new Date(e).toLocaleDateString('en-GB'))
-        // console.log(new Date())
-
         if(e.calendar) {
             setPaintWork({ ...paintWork, year: e });
         } else {
@@ -56,7 +52,6 @@ function ModalForm(props) {
                 setPaintWork({ ...paintWork, [name]: e.target.checked });
             }
         }
-        
     }
 
     const submitHandler = (e) =>{

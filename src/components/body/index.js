@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {Listbox, ListboxItem} from "@nextui-org/react";
 import {IconWrapper} from "../../icons/iconWrapper";
-import { ItemCounter } from "./itemCounter";
 import {BookIcon, FaceIcon, WallIcon} from '../../icons/icons'
 import { NavLink, Outlet } from 'react-router-dom'
 
@@ -21,7 +20,7 @@ export class Body extends Component {
                             >
                             <ListboxItem
                                 key="issues"
-                                endContent={<ItemCounter number={13} />}
+                                // endContent={<ItemCounter number={13} />}
                                 startContent={
                                 <IconWrapper className="bg-success/10 text-success">
                                     <BookIcon className="text-lg " />
@@ -35,8 +34,9 @@ export class Body extends Component {
                             </ListboxItem>
 
                             <ListboxItem 
+                                isDisabled={true}
                                 key="pull_requests" 
-                                endContent={<ItemCounter number={6} />}
+                                // endContent={<ItemCounter number={6} />}
                                 startContent={
                                     <IconWrapper className="bg-success/10 text-success">
                                         <FaceIcon className="text-lg " />
@@ -48,6 +48,7 @@ export class Body extends Component {
                             </ListboxItem>
 
                             <ListboxItem 
+                                isDisabled={true}
                                 key="discussions"
                                 startContent={
                                     <IconWrapper className="bg-success/10 text-success">
@@ -61,7 +62,9 @@ export class Body extends Component {
                             </ListboxItem>
 
                             <ListboxItem key="actions">
-                                Actions
+                                <NavLink to='/body/aboutMe'>
+                                    <p className='h-full w-full'>About Me</p>
+                                </NavLink>
                             </ListboxItem>
 
                             <ListboxItem key="projects">
