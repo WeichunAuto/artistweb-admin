@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
-import { Input, Textarea, Button } from "@nextui-org/react";
+import React, { useState, useEffect } from 'react'
+import { Input, Textarea, Button, Image } from "@nextui-org/react";
 import axiosInstance from '../../axios/request';
 import { Navigate } from 'react-router-dom';
+import DefaultProfile from '../../../icons/defaultProfile.png'
 
 function EditAboutMe(props) {
-    const {toggleIsReadStatus} = props // go back to read mode.
-
+    const { aboutMe: previousAboutMe, initDisplayDataStatus, toggleIsReadStatus } = props 
+    
     const [isTokenValid, setIsTokenValid] = useState(null)
-    const [aboutMe, setAboutMe] = useState({
-        name: '',
-        description: ''
-    })
+    const [aboutMe, setAboutMe] = useState({name: '', description: ''})
     const [image, setImage] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
@@ -55,17 +53,18 @@ function EditAboutMe(props) {
             } else {
                 if (statusCode === 201) {
                     setIsTokenValid(true)
-                    setAboutMe({name:'', description:''})
+                    setAboutMe({ name: '', description: '' })
                     setImage(null)
                     setIsLoading(false)
                     toggleIsReadStatus()
+                    initDisplayDataStatus()
 
                 } else if (statusCode === 401) {
                     setIsTokenValid(false)
                 } else if (statusCode === 403) {
                     setIsTokenValid(true)
                     setErrorMessage('Internal Server Error, Please Contact Admin.')
-                } else if(statusCode === 500) {
+                } else if (statusCode === 500) {
                     setIsTokenValid(true)
                     setIsLoading(false)
                     setErrorMessage(response.response.data)
@@ -88,18 +87,20 @@ function EditAboutMe(props) {
             setValidField({ isNameValid: false, isDescriptionValid: true, isImageValid: false })
             return false
         }
-        if (image === null) {
-            setErrorMessage('You also need to choose a profile photo to upload.')
-            setValidField({ isNameValid: false, isDescriptionValid: false, isImageValid: true })
-            return false
-        } else if (!image.type.startsWith('image')) {
-            setValidField({ isNameValid: false, isDescriptionValid: false, isImageValid: true })
-            setErrorMessage('You can only upload image files.')
-            return false
-        } else if (image.size >= 9999500) {
-            setValidField({ isNameValid: false, isDescriptionValid: false, isImageValid: true })
-            setErrorMessage('The maximum image size should be less than 10MB.')
-            return false
+        if(!previousAboutMe.imageURL) {
+            if (image === null) { 
+                setErrorMessage('You also need to choose a profile photo to upload.')
+                setValidField({ isNameValid: false, isDescriptionValid: false, isImageValid: true })
+                return false
+            } else if (!image.type.startsWith('image')) {
+                setValidField({ isNameValid: false, isDescriptionValid: false, isImageValid: true })
+                setErrorMessage('You can only upload image files.')
+                return false
+            } else if (image.size >= 9999500) {
+                setValidField({ isNameValid: false, isDescriptionValid: false, isImageValid: true })
+                setErrorMessage('The maximum image size should be less than 10MB.')
+                return false
+            }
         }
 
         setValidField({ isNameValid: false, isDescriptionValid: false, isImageValid: false })
@@ -113,8 +114,8 @@ function EditAboutMe(props) {
         return (
             <div className='w-2/3 h-96 text-xl mx-auto mt-10'>
                 <form className="flex flex-col items-center">
-                    <div className='w-full flex flex-row justify-between items-start gap-4 border-1 p-4 rounded-lg'>
-                        <div className='basis-1/2'>
+                    <div className='w-full flex flex-row justify-between gap-4 border-1 p-4 rounded-lg items-center'>
+                        <div className='basis-1/3 flex flex-row items-center bg-green-100'>
                             <Input
                                 type="text"
                                 label="name"
@@ -127,22 +128,32 @@ function EditAboutMe(props) {
                                 errorMessage={errorMessage}
                             />
                         </div>
-
-                        <div className='basis-1/2 h-full'>
-                            <label className="block">
-                                <p className='text-sm text-gray-500'>Choose your profile photo.</p>
-                                <input
-                                    type="file"
-                                    className="block w-full text-sm text-slate-500
-                                            file:mr-4 file:py-2 file:px-4
-                                            file:rounded-full file:border-0
-                                            file:text-sm file:font-semibold
-                                            file:bg-violet-50 file:text-blue-700
-                                            hover:file:bg-violet-100"
-                                    onChange={handleImageChange}
+                        <div className='basis-2/3 h-full flex flex-row gap-4 justify-items-end justify-end items-center'>
+                            <div className='size-20 rounded-full bg-blue-100'>
+                                <Image
+                                    radius='sm'
+                                    alt=""
+                                    src={previousAboutMe.imageURL || DefaultProfile}
+                                    className='rounded-full'
+                                    // fallbackSrc={DefaultProfile}
                                 />
-                                <p className='text-xs m-1 text-[#F31260]'>{ValidField.isImageValid && errorMessage}</p>
-                            </label>
+                            </div>
+                            <div className=''>
+                                <label className="block">
+                                    <p className='text-sm text-gray-500'>Choose your profile photo.</p>
+                                    <input
+                                        type="file"
+                                        className="block w-full text-sm text-slate-500
+                                                file:mr-4 file:py-2 file:px-4
+                                                file:rounded-full file:border-0
+                                                file:text-sm file:font-semibold
+                                                file:bg-violet-50 file:text-blue-700
+                                                hover:file:bg-violet-100"
+                                        onChange={handleImageChange}
+                                    />
+                                    <p className='text-xs m-1 text-[#F31260]'>{ValidField.isImageValid && errorMessage}</p>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -170,7 +181,7 @@ function EditAboutMe(props) {
                             </Button>
                         </div>
                     </div>
-                    
+
                 </form>
             </div>
         )

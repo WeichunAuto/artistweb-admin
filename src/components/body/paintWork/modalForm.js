@@ -36,7 +36,7 @@ function ModalForm(props) {
         const file = e.target.files[0];
         
         if (file) {
-            console.log(file)
+            // console.log(file)
           setImage(file);
         }
     }
@@ -70,7 +70,7 @@ function ModalForm(props) {
             setErrorMsg('Please give a size in width.')
             return
         }
-        console.log('dimensionHeight = ', dimensionHeight)
+        // console.log('dimensionHeight = ', dimensionHeight)
         if(dimensionHeight === '') {
             setErrorMsg('Please give a size in height.')
             return
