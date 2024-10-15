@@ -12,6 +12,7 @@ import Login from './components/login';
 import App from './App';
 import Error from './components/body/error';
 import ProtectedRoute from './components/protectedRoute';
+import Topics from './components/body/topics';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
             {
                 path: 'aboutMe',
                 Component: AboutMe
+            },
+            {
+                path: 'topics',
+                Component: Topics
             }
         ]
     },

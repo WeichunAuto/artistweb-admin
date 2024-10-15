@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Listbox, ListboxItem} from "@nextui-org/react";
 import {IconWrapper} from "../../icons/iconWrapper";
-import {BookIcon, FaceIcon, WallIcon} from '../../icons/icons'
+import {BookIcon, FaceIcon, WallIcon, AboutMeIcon, TopicsIcon} from '../../icons/icons'
 import { NavLink, Outlet } from 'react-router-dom'
 
 export class Body extends Component {
@@ -61,14 +61,30 @@ export class Body extends Component {
                                 </NavLink>
                             </ListboxItem>
 
-                            <ListboxItem key="actions">
+                            <ListboxItem 
+                                key="actions"
+                                startContent={
+                                    <IconWrapper className="bg-success/10 text-success">
+                                        <AboutMeIcon className="text-lg " />
+                                    </IconWrapper>
+                                    } 
+                                >
                                 <NavLink to='/body/aboutMe'>
                                     <p className='h-full w-full'>About Me</p>
                                 </NavLink>
                             </ListboxItem>
 
-                            <ListboxItem key="projects">
-                                Projects
+                            <ListboxItem 
+                                key="actions"
+                                startContent={
+                                    <IconWrapper className="bg-success/10 text-success">
+                                        <TopicsIcon className="text-lg " />
+                                    </IconWrapper>
+                                    } 
+                                >
+                                <NavLink to='/body/topics'>
+                                    <p className='h-full w-full'>Topics</p>
+                                </NavLink>
                             </ListboxItem>
                             
                         </Listbox>

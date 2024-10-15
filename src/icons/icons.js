@@ -182,9 +182,122 @@ export const PreviewIcon = (props) => (
   </svg>
 );
 
-export const ProfileDefault = () => {
-  <svg width="100px" height="100px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path opacity="0.4" d="M12.1605 10.87C12.0605 10.86 11.9405 10.86 11.8305 10.87C9.45055 10.79 7.56055 8.84 7.56055 6.44C7.56055 3.99 9.54055 2 12.0005 2C14.4505 2 16.4405 3.99 16.4405 6.44C16.4305 8.84 14.5405 10.79 12.1605 10.87Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M7.1607 14.56C4.7407 16.18 4.7407 18.82 7.1607 20.43C9.9107 22.27 14.4207 22.27 17.1707 20.43C19.5907 18.81 19.5907 16.17 17.1707 14.56C14.4307 12.73 9.9207 12.73 7.1607 14.56Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+export const AboutMeIcon = (props) => (
+  <svg
+    width="1em"
+    height="1em"
+    viewBox="0 0 32 32"
+    enableBackground="new 0 0 32 32"
+    xmlSpace="preserve"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    {...props}
+  >
+    <g id="Smart_Watch41" />
+    <g id="Smart_Watch40">
+      <g>
+        <path
+          d="M27,13h-1V9c0-1.65-1.35-3-3-3h-1.18H10.18H9C7.35,6,6,7.35,6,9v14c0,1.65,1.35,3,3,3h1.18h11.64H23    c1.65,0,3-1.35,3-3v-4h1c0.5527,0,1-0.4473,1-1v-4C28,13.4473,27.5527,13,27,13z M14.5,20.5c0-0.83,0.67-1.5,1.5-1.5    s1.5,0.67,1.5,1.5c0,0.83-0.67,1.5-1.5,1.5S14.5,21.33,14.5,20.5z M17,15.82V17c0,0.55-0.45,1-1,1s-1-0.45-1-1v-2    c0-0.55,0.45-1,1-1s1-0.45,1-1s-0.45-1-1-1s-1,0.45-1,1s-0.45,1-1,1s-1-0.45-1-1c0-1.65,1.35-3,3-3s3,1.35,3,3    C19,14.3,18.16,15.41,17,15.82z"
+          fill="#A2C3FB"
+        />
+        <path
+          d="M19.38,4h2.04l-0.44-2.2C20.89,1.34,20.48,1,20,1h-8c-0.48,0-0.89,0.34-0.98,0.8L10.58,4h2.04H19.38z"
+          fill="blue"
+        />
+        <path
+          d="M12.62,28h-2.04l0.44,2.2c0.09,0.46,0.5,0.8,0.98,0.8h8c0.48,0,0.89-0.34,0.98-0.8l0.44-2.2h-2.04H12.62z"
+          fill="blue"
+        />
+      </g>
+    </g>
+    <g id="Smart_Watch39" />
+    <g id="Smart_Watch38" />
+    <g id="Smart_Watch37" />
+    <g id="Smart_Watch36" />
+    <g id="Smart_Watch35" />
+    <g id="Smart_Watch34" />
+    <g id="Smart_Watch33" />
+    <g id="Smart_Watch32" />
+    <g id="Smart_Watch31" />
+    <g id="Smart_Watch30" />
+    <g id="Smart_Watch29" />
+    <g id="Smart_Watch28" />
+    <g id="Smart_Watch27" />
+    <g id="Smart_Watch26" />
+    <g id="Smart_Watch25" />
+    <g id="Smart_Watch24" />
+    <g id="Smart_Watch23" />
+    <g id="Smart_Watch22" />
+    <g id="Smart_Watch21" />
+    <g id="Smart_Watch20" />
+    <g id="Smart_Watch19" />
+    <g id="Smart_Watch18" />
+    <g id="Smart_Watch17" />
+    <g id="Smart_Watch16" />
+    <g id="Smart_Watch15" />
+    <g id="Smart_Watch14" />
+    <g id="Smart_Watch13" />
+    <g id="Smart_Watch12" />
+    <g id="Smart_Watch11" />
+    <g id="Smart_Watch10" />
+    <g id="Smart_Watch09" />
+    <g id="Smart_Watch08" />
+    <g id="Smart_Watch07" />
+    <g id="Smart_Watch06" />
+    <g id="Smart_Watch05" />
+    <g id="Smart_Watch04" />
+    <g id="Smart_Watch03" />
+    <g id="Smart_Watch02" />
   </svg>
-};
+);
+
+export const TopicsIcon = (props) => (
+  <svg
+    width="1em"
+    height="1em"
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <rect width={48} height={48} fill="white" fillOpacity={0.01} />
+    <path
+      d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 26.7117 4.53967 29.2974 5.51747 31.6554C6.02232 32.8729 6.64396 34.0297 7.36843 35.1119C7.61157 35.4751 7.15543 37.7711 6 42C10.2289 40.8446 12.5249 40.3884 12.8881 40.6316C13.9703 41.356 15.1271 41.9777 16.3446 42.4825C18.7026 43.4603 21.2883 44 24 44Z"
+      fill="none"
+      stroke="blue"
+      strokeWidth={3}
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.6042 19.82H33.3835"
+      stroke="blue"
+      strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M21.8465 15.7378L18.9328 32.2622"
+      stroke="blue"
+      strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M28.8465 15.7378L25.9328 32.2622"
+      stroke="blue"
+      strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.6042 28H31.3835"
+      stroke="blue"
+      strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+export default TopicsIcon;
+
+
