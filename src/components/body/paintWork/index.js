@@ -67,7 +67,7 @@ export default function PaintWork() {
                 aPaintWork.id,
                 error
               );
-              return { ...aPaintWork, imageUrl: "" };
+              return { ...aPaintWork, imageURL: "" };
             }
           })
         )

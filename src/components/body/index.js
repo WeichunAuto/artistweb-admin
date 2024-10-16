@@ -19,7 +19,7 @@ export class Body extends Component {
                             }}
                             >
                             <ListboxItem
-                                key="issues"
+                                key="Painting_Work"
                                 // endContent={<ItemCounter number={13} />}
                                 startContent={
                                 <IconWrapper className="bg-success/10 text-success">
@@ -35,7 +35,7 @@ export class Body extends Component {
 
                             <ListboxItem 
                                 isDisabled={true}
-                                key="pull_requests" 
+                                key="Face_Art" 
                                 // endContent={<ItemCounter number={6} />}
                                 startContent={
                                     <IconWrapper className="bg-success/10 text-success">
@@ -49,7 +49,7 @@ export class Body extends Component {
 
                             <ListboxItem 
                                 isDisabled={true}
-                                key="discussions"
+                                key="Wall_Art"
                                 startContent={
                                     <IconWrapper className="bg-success/10 text-success">
                                         <WallIcon className="text-lg " />
@@ -62,7 +62,7 @@ export class Body extends Component {
                             </ListboxItem>
 
                             <ListboxItem 
-                                key="actions"
+                                key="About_Me"
                                 startContent={
                                     <IconWrapper className="bg-success/10 text-success">
                                         <AboutMeIcon className="text-lg " />
@@ -75,7 +75,7 @@ export class Body extends Component {
                             </ListboxItem>
 
                             <ListboxItem 
-                                key="actions"
+                                key="Topics"
                                 startContent={
                                     <IconWrapper className="bg-success/10 text-success">
                                         <TopicsIcon className="text-lg " />
