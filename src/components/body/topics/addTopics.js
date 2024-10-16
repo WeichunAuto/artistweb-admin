@@ -4,7 +4,7 @@ import axiosInstance from '../../axios/request';
 import { Navigate } from 'react-router-dom';
 
 export default function AddTopics(props) {
-    const { isOpen, onOpenChange } = props;
+    const { isOpen, onOpenChange, setIsRefresh } = props;
 
     const [isTokenValid, setIsTokenValid] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -56,7 +56,7 @@ export default function AddTopics(props) {
                     setImage(null)
                     setIsLoading(false)
                     onOpenChange()
-                    // initDisplayDataStatus()
+                    setIsRefresh(true)
 
                 } else if (statusCode === 401) { // token is invalid.
                     setIsTokenValid(false)
