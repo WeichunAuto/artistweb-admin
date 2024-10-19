@@ -22,6 +22,8 @@ function Topics() {
                     // console.log(response)
                     if (statusCode === 200) {
                         setTopicDtoList(response.data)
+                    } else if(statusCode === 401) {
+                        setIsTokenValid(false)
                     }
                 })
         }
@@ -76,7 +78,7 @@ function Topics() {
                     </Button>
                 </div>
                 <div className='pt-4'>
-                    <Table aria-label="Example static collection table">
+                    <Table aria-label="">
                         <TableHeader>
                             <TableColumn>ID</TableColumn>
                             <TableColumn>

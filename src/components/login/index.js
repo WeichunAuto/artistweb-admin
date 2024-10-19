@@ -118,7 +118,7 @@ export default function Login(props) {
             </form>
   
             <p className="mt-10 text-center text-sm text-gray-500">
-              Not a member?{'   '}
+              Not a remember?{'   '}
                 Contact the Admin
             </p>
           </div>

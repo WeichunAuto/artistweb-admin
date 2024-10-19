@@ -13,6 +13,7 @@ import App from './App';
 import Error from './components/body/error';
 import ProtectedRoute from './components/protectedRoute';
 import Topics from './components/body/topics';
+import ContactMe from './components/body/contactMe';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
             {
                 path: 'topics',
                 Component: Topics
+            },
+            {
+                path: 'contactMe',
+                Component: ContactMe
             }
         ]
     },
