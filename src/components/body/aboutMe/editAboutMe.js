@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Input, Textarea, Button, Image } from "@nextui-org/react";
 import axiosInstance from '../../axios/request';
 import { Navigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ function EditAboutMe(props) {
     const { aboutMe: previousAboutMe, initDisplayDataStatus, toggleIsReadStatus } = props 
     
     const [isTokenValid, setIsTokenValid] = useState(null)
-    const [aboutMe, setAboutMe] = useState({name: '', description: ''})
+    const [aboutMe, setAboutMe] = useState({name: previousAboutMe.name, description: previousAboutMe.description})
     const [image, setImage] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
