@@ -108,10 +108,7 @@ function ModalForm(props) {
                 "Content-Type": "multipart/form-data"
               },
         }).then((response) => {
-
-            console.log(response)
             const statusCode = response.status
-            console.log('response state code：', statusCode)
             if(statusCode === undefined && response.code === 'ERR_NETWORK') { // TODO: Consider this is due to exceeding the max upload size.
                 setIsTokenValid(true)
             } else {

@@ -57,7 +57,7 @@ export default function PaintWork() {
         const updatedMainData = await Promise.all(
           mainData.map(async (aPaintWork) => {
             try {
-              const response = await axiosInstance.get(`/getAPaintWork/${aPaintWork.id}/image`, {responseType: "blob"})
+              const response = await axiosInstance.get(`/getPaintWorkCover/${aPaintWork.id}/image`, {responseType: "blob"})
               
               const imageURL = URL.createObjectURL(response.data);
               return { ...aPaintWork, imageURL }
