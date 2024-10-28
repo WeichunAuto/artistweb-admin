@@ -11,21 +11,21 @@ const ProtectedRoute = ({element}) => {
         if(cacheToken === null) {
             setIsAuthenticated(false)
         } else {
-            axiosInstance.post('/isTokenValid', {})
-            .then((response) => {
-                const statusCode = response.status
-                
-                if(statusCode === 200) {
-                    setIsAuthenticated(true)
-                    console.log('protected route token response : ', response.data)
-                } else if(statusCode === 401) { // Token is invalid.
-                    setIsAuthenticated(false)
-                    console.log('protected route token response : ', response.response.data)
+             (async function (){
+                try {
+                    const response = await axiosInstance.post('/isTokenValid', {})
+                    const statusCode = response.status
+                    if(statusCode === 200) {
+                        setIsAuthenticated(true)
+                        console.log('protected route token response : ', response.data)
+                    } else if(statusCode === 401) { // Token is invalid.
+                        setIsAuthenticated(false)
+                        console.log('protected route token response : ', response.response.data)
+                    }
+                } catch(error) {
+                    console.log('protected route token error : ', error)
                 }
-            })
-            .catch((error) => {
-                console.log('protected route token error : ', error)
-            })
+             })() 
         }
     }, [])
 

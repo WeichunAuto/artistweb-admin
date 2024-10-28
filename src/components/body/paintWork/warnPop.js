@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button} from "@nextui-org/react";
-import axiosInstance from '../axios/request';
+import axiosInstance from '../../axios/request';
 
 
 function WarnPop(props) {
