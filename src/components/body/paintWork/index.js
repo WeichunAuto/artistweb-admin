@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 
 import {
   Table,
@@ -17,15 +17,21 @@ import {
   User,
   Pagination,
   useDisclosure,
-  Spacer
+  Spacer,
+  Badge,
 } from "@nextui-org/react";
-import { PlusIcon, SearchIcon, ChevronDownIcon, PreviewIcon } from "../../../icons/icons";
-import ModalForm from './modalForm'
+import {
+  PlusIcon,
+  SearchIcon,
+  ChevronDownIcon,
+  PreviewIcon,
+} from "../../../icons/icons";
+import ModalForm from "./modalForm";
 import { columns, statusOptions } from "./data";
 import { capitalize } from "../../utils";
 import axiosInstance from "../../axios/request";
 import TipsPop from "../tipsPop";
-import WarnPop from "./warnPop"
+import WarnPop from "./warnPop";
 import AddDecorations from "./addDecorations";
 import { ButtonGroup } from "react-bootstrap";
 
@@ -35,33 +41,43 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["TITLE", "DESCRIPTION", "PRICE", "STATUS", "DATE", "ACTIONS"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "TITLE",
+  "DESCRIPTION",
+  "PRICE",
+  "STATUS",
+  "DATE",
+  "ACTIONS",
+];
 
 export default function PaintWork() {
-  const [isMainDataFetched, setIsMainDataFetched] = useState(false)
-  const [mainData, setMainData] = useState([])
-  const [artWorks, setArtWorks] = useState([])
+  const [isMainDataFetched, setIsMainDataFetched] = useState(false);
+  const [mainData, setMainData] = useState([]);
+  const [artWorks, setArtWorks] = useState([]);
 
   useEffect(() => {
-    if(isMainDataFetched === false) {
+    if (isMainDataFetched === false) {
       (async () => {
-        const response = await axiosInstance.get('/fetchPaintWorks')
-        setMainData(response.data)
-        setIsMainDataFetched(true)
+        const response = await axiosInstance.get("/fetchPaintWorks");
+        setMainData(response.data);
+        setIsMainDataFetched(true);
       })();
     }
-  }, [isMainDataFetched])
+  }, [isMainDataFetched]);
 
   useEffect(() => {
-    if(mainData.length > 0) {
+    if (mainData.length > 0) {
       (async () => {
         const updatedMainData = await Promise.all(
           mainData.map(async (aPaintWork) => {
             try {
-              const response = await axiosInstance.get(`/getPaintWorkCover/${aPaintWork.id}/image`, {responseType: "blob"})
-              
+              const response = await axiosInstance.get(
+                `/getPaintWorkCover/${aPaintWork.id}/image`,
+                { responseType: "blob" }
+              );
+
               const imageURL = URL.createObjectURL(response.data);
-              return { ...aPaintWork, imageURL }
+              return { ...aPaintWork, imageURL };
             } catch (error) {
               console.error(
                 "Error fetching image for aPaintWork ID:",
@@ -71,16 +87,17 @@ export default function PaintWork() {
               return { ...aPaintWork, imageURL: "" };
             }
           })
-        )
-        setArtWorks(updatedMainData)
-      })()
+        );
+        setArtWorks(updatedMainData);
+      })();
     }
-
-  }, [mainData])
+  }, [mainData]);
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(INITIAL_VISIBLE_COLUMNS)
+  );
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
@@ -89,17 +106,20 @@ export default function PaintWork() {
   });
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modalForm to upload a new paint work.
-  const { isOpen: isTipsOpen, onOpenChange: onTipsOpenChange } = useDisclosure(); // manage the state of opening a Tips.
-  const {isOpen: isWarnOpen, onOpenChange: onWarnOpenChange } = useDisclosure(); // manage the state of opening a warn pop.
-  const {isOpen: isDecorationOpen, onOpenChange: onDecorationOpenChange } = useDisclosure(); // manage the state of adding a decoration image.
+  const { isOpen: isTipsOpen, onOpenChange: onTipsOpenChange } =
+    useDisclosure(); // manage the state of opening a Tips.
+  const { isOpen: isWarnOpen, onOpenChange: onWarnOpenChange } =
+    useDisclosure(); // manage the state of opening a warn pop.
+  const { isOpen: isDecorationOpen, onOpenChange: onDecorationOpenChange } =
+    useDisclosure(); // manage the state of adding a decoration image.
 
-  const [tipsMsg, setTipsMsg] = useState('')
+  const [tipsMsg, setTipsMsg] = useState("");
 
   const [dropItem, setDropItem] = useState({
     id: -1,
-    title: ''
-  })
-  const [selectedPaintWorkId, setSelectedPaintWorkId] = useState(-1)
+    title: "",
+  });
+  const [selectedPaintWorkId, setSelectedPaintWorkId] = useState(-1);
 
   const [page, setPage] = React.useState(1);
 
@@ -108,18 +128,25 @@ export default function PaintWork() {
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
 
-    return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...artWorks];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) => user.title.includes(filterValue))
-    }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+        user.title.includes(filterValue)
+      );
+    }
+    if (
+      statusFilter !== "all" &&
+      Array.from(statusFilter).length !== statusOptions.length
+    ) {
+      filteredUsers = filteredUsers.filter((user) =>
+        Array.from(statusFilter).includes(user.status)
       );
     }
 
@@ -145,66 +172,111 @@ export default function PaintWork() {
     });
   }, [sortDescriptor, items]);
 
-  
+  const renderCell = React.useCallback(
+    (user, columnKey) => {
+      const addDecorationImage = (id) => {
+        setSelectedPaintWorkId(id);
+        onDecorationOpenChange();
+      };
 
-  const renderCell = React.useCallback((user, columnKey) => {
+      /**
+       * send a request to delete an item.
+       * @param {*} id
+       */
+      const deleteItem = (id, title) => {
+        setDropItem({ id, title });
+        onWarnOpenChange();
+      };
 
-    const addDecorationImage = (id) => {
-      setSelectedPaintWorkId(id)
-      onDecorationOpenChange()
-    }
-
-    /**
-     * send a request to delete an item.
-     * @param {*} id 
-     */
-    const deleteItem = (id, title) => {
-      setDropItem({id, title})
-      onWarnOpenChange()
-    }
-
-    const cellValue = user[columnKey.toLowerCase()];
-    switch (columnKey) {
-      case "TITLE":
-        return (
-          <User
-            avatarProps={{ radius: "lg", src: user.imageURL }}
-            description={user.title}
-            name={cellValue}
-          >
-            {user.title}
-          </User>
-        );
-      case "DESCRIPTION":
-        return (
-          <p className="text-bold text-small capitalize max-w-[300px] line-clamp-2">{cellValue}</p>
-        );
-      case "STATUS": 
-        return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
-            {cellValue}
-          </Chip>
-        ); 
-      case "ACTIONS":
-        return (
-          <div className="relative flex justify-center items-center gap-2">
-              <Button size='sm' variant="light">Edit</Button>
+      const cellValue = user[columnKey.toLowerCase()];
+      switch (columnKey) {
+        case "TITLE":
+          return user.decorationCount > 1 ? ( // when decorationCount > 1 then display the badge 
+            <Badge
+              content={user.decorationCount}
+              size="sm"
+              color="secondary"
+              placement="top-left"
+            >
+              <User
+                avatarProps={{ radius: "lg", src: user.imageURL }}
+                description={user.title}
+                name={cellValue}
+              >
+                {user.title}
+              </User>
+            </Badge>
+          ) : ( // when decorationCount > 1 then no display the badge
+            <Badge size="sm" color="secondary" placement="top-left">
+              <User
+                avatarProps={{ radius: "lg", src: user.imageURL }}
+                description={user.title}
+                name={cellValue}
+              >
+                {user.title}
+              </User>
+            </Badge>
+          );
+        case "DESCRIPTION":
+          return (
+            <p className="text-bold text-small capitalize max-w-[300px] line-clamp-2">
+              {cellValue}
+            </p>
+          );
+        case "STATUS":
+          return (
+            <Chip
+              className="capitalize"
+              color={statusColorMap[user.status]}
+              size="sm"
+              variant="flat"
+            >
+              {cellValue}
+            </Chip>
+          );
+        case "ACTIONS":
+          return (
+            <div className="relative flex justify-center items-center gap-2">
+              <Button size="sm" variant="light">
+                Edit
+              </Button>
               <ButtonGroup>
-                <Button size='sm' radius='full' isIconOnly color="primary" variant="light" onPress={() => addDecorationImage(user.id)}>
-                  <PlusIcon size='16'/>
+                <Button
+                  size="sm"
+                  radius="full"
+                  isIconOnly
+                  color="primary"
+                  variant="light"
+                  onPress={() => addDecorationImage(user.id)}
+                >
+                  <PlusIcon size="16" />
                 </Button>
                 <Spacer />
-                <Button size='sm' radius='full' isIconOnly color="primary" variant="light">
+                <Button
+                  size="sm"
+                  radius="full"
+                  isIconOnly
+                  color="primary"
+                  variant="light"
+                >
                   <PreviewIcon />
                 </Button>
               </ButtonGroup>
-              <Button size='sm' variant="light" onPress={() => deleteItem(user.id, user.title)}>Delete</Button>
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, [onWarnOpenChange, onDecorationOpenChange]); 
+              <Button
+                size="sm"
+                variant="light"
+                onPress={() => deleteItem(user.id, user.title)}
+              >
+                Delete
+              </Button>
+            </div>
+          );
+        default:
+          return cellValue;
+      }
+    },
+    [onWarnOpenChange, onDecorationOpenChange]
+  );
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -233,9 +305,9 @@ export default function PaintWork() {
   }, []);
 
   const onClear = React.useCallback(() => {
-    setFilterValue("")
-    setPage(1)
-  }, [])
+    setFilterValue("");
+    setPage(1);
+  }, []);
 
   const topContent = React.useMemo(() => {
     return (
@@ -254,7 +326,10 @@ export default function PaintWork() {
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                <Button
+                  endContent={<ChevronDownIcon className="text-small" />}
+                  variant="flat"
+                >
                   Status
                 </Button>
               </DropdownTrigger>
@@ -275,7 +350,10 @@ export default function PaintWork() {
             </Dropdown>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                <Button
+                  endContent={<ChevronDownIcon className="text-small" />}
+                  variant="flat"
+                >
                   Columns
                 </Button>
               </DropdownTrigger>
@@ -300,7 +378,9 @@ export default function PaintWork() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {artWorks.length} paintWorks</span>
+          <span className="text-default-400 text-small">
+            Total {artWorks.length} paintWorks
+          </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -322,7 +402,7 @@ export default function PaintWork() {
     onRowsPerPageChange,
     artWorks.length,
     onSearchChange,
-    onClear,  
+    onClear,
     onOpen,
   ]);
 
@@ -342,27 +422,37 @@ export default function PaintWork() {
           page={page}
           total={pages}
           onChange={setPage}
-
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
+          <Button
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onPreviousPage}
+          >
             Previous
           </Button>
-          <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
+          <Button
+            isDisabled={pages === 1}
+            size="sm"
+            variant="flat"
+            onPress={onNextPage}
+          >
             Next
           </Button>
         </div>
       </div>
     );
-  }, [selectedKeys, 
-    page, pages, 
+  }, [
+    selectedKeys,
+    page,
+    pages,
     filteredItems.length,
     onNextPage,
     onPreviousPage,
   ]);
 
   return (
-    
     <>
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
@@ -383,7 +473,6 @@ export default function PaintWork() {
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
-            
             <TableColumn
               key={column.uid}
               align={column.uid === "ACTIONS" ? "center" : "left"}
@@ -396,42 +485,52 @@ export default function PaintWork() {
         <TableBody emptyContent={"No works found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
             </TableRow>
           )}
         </TableBody>
       </Table>
 
-      <ModalForm fields={
-        {
+      <ModalForm
+        fields={{
           title: true,
           description: true,
           year: true,
           price: true,
           dimension: true,
           img: true,
-          active: true
-        }
-      } 
-      isOpen={isOpen} 
-      onOpenChange={onOpenChange} // control to close the modalForm after adding a new paintWork.
-      onTipsOpenChange = {onTipsOpenChange} // control to pop up the tips window.
-      setTipsMsg = {setTipsMsg}
-      setIsMainDataFetched={setIsMainDataFetched} // control to excute the useEffect() method to refresh the main data.
+          active: true,
+        }}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange} // control to close the modalForm after adding a new paintWork.
+        onTipsOpenChange={onTipsOpenChange} // control to pop up the tips window.
+        setTipsMsg={setTipsMsg}
+        setIsMainDataFetched={setIsMainDataFetched} // control to excute the useEffect() method to refresh the main data.
       />
 
-      <TipsPop isTipsOpen={isTipsOpen} onTipsOpenChange={onTipsOpenChange} tips={tipsMsg} />
+      <TipsPop
+        isTipsOpen={isTipsOpen}
+        onTipsOpenChange={onTipsOpenChange}
+        tips={tipsMsg}
+      />
 
-      <WarnPop isWarnOpen={isWarnOpen} onWarnOpenChange={onWarnOpenChange} dropItem={dropItem} setIsMainDataFetched={setIsMainDataFetched}/>
-
-      <AddDecorations 
-        isDecorationOpen={isDecorationOpen} 
-        onDecorationOpenChange={onDecorationOpenChange} 
-        selectedPaintWorkId={selectedPaintWorkId}
-        onTipsOpenChange = {onTipsOpenChange}
-        setTipsMsg = {setTipsMsg}
+      <WarnPop
+        isWarnOpen={isWarnOpen}
+        onWarnOpenChange={onWarnOpenChange}
+        dropItem={dropItem}
         setIsMainDataFetched={setIsMainDataFetched}
-        />
+      />
+
+      <AddDecorations
+        isDecorationOpen={isDecorationOpen}
+        onDecorationOpenChange={onDecorationOpenChange}
+        selectedPaintWorkId={selectedPaintWorkId}
+        onTipsOpenChange={onTipsOpenChange}
+        setTipsMsg={setTipsMsg}
+        setIsMainDataFetched={setIsMainDataFetched}
+      />
     </>
   );
 }
