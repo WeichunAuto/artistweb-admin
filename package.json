@@ -22,12 +22,13 @@
     "react-burger-menu": "^3.0.9",
     "react-dom": "^18.3.1",
     "react-pro-sidebar": "^1.1.0",
+    "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "PORT=3002 react-scripts start --host 0.0.0.0",
+    "build": "REACT_APP_ENV=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

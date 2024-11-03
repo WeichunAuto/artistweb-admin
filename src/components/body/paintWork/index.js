@@ -112,6 +112,7 @@ export default function PaintWork() {
     useDisclosure(); // manage the state of opening a warn pop.
   const { isOpen: isDecorationOpen, onOpenChange: onDecorationOpenChange } =
     useDisclosure(); // manage the state of adding a decoration image.
+    
 
   const [tipsMsg, setTipsMsg] = useState("");
 

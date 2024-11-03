@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  artistweb-admin:
+    build: .
+    container_name: artistweb-admin_c
+    ports:
+      - "3002:3002"
+    stdin_open: true
+    tty: true

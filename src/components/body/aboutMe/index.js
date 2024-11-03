@@ -28,17 +28,17 @@ function AboutMe() {
     }, [aboutMe])
 
     useEffect(() => {
-        if (isDataReady && aboutMe !== null) {
+        if (isDataReady) {
             (async () => {
                 const response = await axiosInstance.get(`/getProfilePhoto/${aboutMe.id}/image`, { responseType: "blob" })
                 const statusCode = response.status
                 if (statusCode === 200) {
                     const imageURL = URL.createObjectURL(response.data);
-                    setAboutMe({ ...aboutMe, imageURL })
+                    setAboutMe((prevAboutMe)=> ({...prevAboutMe, imageURL}))
                 }
             })();
         }
-    }, [isDataReady])
+    }, [isDataReady, aboutMe?.id])
 
     const toggleIsReadStatus = () => {
         setIsRead(!isRead)
