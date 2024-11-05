@@ -4,11 +4,11 @@ WORKDIR /ArtistWeb
 
 COPY package*.json .
 
-RUN npm install & npm install axios
+RUN npm ci && npm install axios
 
 COPY . .
 
-RUN npm run build
+RUN npm run build --verbose
 
 FROM nginx:alpine
 
