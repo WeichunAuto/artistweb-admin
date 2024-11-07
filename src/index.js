@@ -14,6 +14,7 @@ import Error from './components/body/error';
 import ProtectedRoute from './components/protectedRoute';
 import Topics from './components/body/topics';
 import ContactMe from './components/body/contactMe';
+import Settings from './components/body/settings';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
             {
                 path: 'contactMe',
                 Component: ContactMe
+            },
+            {
+                path: 'settings',
+                Component: Settings
             }
         ]
     },

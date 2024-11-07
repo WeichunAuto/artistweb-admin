@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Listbox, ListboxItem} from "@nextui-org/react";
 import {IconWrapper} from "../../icons/iconWrapper";
-import {BookIcon, FaceIcon, WallIcon, AboutMeIcon, TopicsIcon, MessageICON} from '../../icons/icons'
+import {BookIcon, FaceIcon, WallIcon, AboutMeIcon, TopicsIcon, MessageIcon, SettingIcon} from '../../icons/icons'
 import { NavLink, Outlet } from 'react-router-dom'
 
 export class Body extends Component {
@@ -91,12 +91,25 @@ export class Body extends Component {
                                 key="Contact_Me"
                                 startContent={
                                     <IconWrapper className="bg-success/10 text-success">
-                                        <MessageICON className="text-base " />
+                                        <MessageIcon className="text-base " />
                                     </IconWrapper>
                                     } 
                                 >
                                 <NavLink to='/body/contactMe'>
                                     <p className='h-full w-full'>Customer Messages</p>
+                                </NavLink>
+                            </ListboxItem>
+
+                            <ListboxItem 
+                                key="Setting"
+                                startContent={
+                                    <IconWrapper className="bg-success/10 text-success">
+                                        <SettingIcon className="text-base " />
+                                    </IconWrapper>
+                                    } 
+                                >
+                                <NavLink to='/body/settings'>
+                                    <p className='h-full w-full'>Settings</p>
                                 </NavLink>
                             </ListboxItem>
                             
