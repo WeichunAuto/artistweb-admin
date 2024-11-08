@@ -26,7 +26,8 @@ import {
   ChevronDownIcon,
   PreviewIcon,
 } from "../../../icons/icons";
-import ModalForm from "./modalForm";
+import AddPaintWork from "./addPaintWork";
+import EditPaintWork from "./editPaintWork";
 import { columns, statusOptions } from "./data";
 import { capitalize } from "../../utils";
 import axiosInstance from "../../axios/request";
@@ -105,7 +106,8 @@ export default function PaintWork() {
     direction: "",
   });
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a modalForm to upload a new paint work.
+  const { isOpen, onOpen, onOpenChange } = useDisclosure(); // manage the state of opening a addPaintWork form to upload a new paint work.
+  const { isOpen: isEditOpen, onOpenChange: onEditOpenChange } = useDisclosure(); 
   const { isOpen: isTipsOpen, onOpenChange: onTipsOpenChange } =
     useDisclosure(); // manage the state of opening a Tips.
   const { isOpen: isWarnOpen, onOpenChange: onWarnOpenChange } =
@@ -114,7 +116,8 @@ export default function PaintWork() {
     useDisclosure(); // manage the state of adding a decoration image.
     
 
-  const [tipsMsg, setTipsMsg] = useState("");
+  const [tipsMsg, setTipsMsg] = useState("")
+  const [aPaintWork, setAPaintWork] = useState(null)
 
   const [dropItem, setDropItem] = useState({
     id: -1,
@@ -189,6 +192,12 @@ export default function PaintWork() {
         onWarnOpenChange();
       };
 
+      const editAPaintWork = (aPaintWork) => {
+        setAPaintWork(aPaintWork)
+        onEditOpenChange()
+        
+      }
+
       const cellValue = user[columnKey.toLowerCase()];
       switch (columnKey) {
         case "TITLE":
@@ -238,7 +247,7 @@ export default function PaintWork() {
         case "ACTIONS":
           return (
             <div className="relative flex justify-center items-center gap-2">
-              <Button size="sm" variant="light">
+              <Button size="sm" variant="light" onPress={() => editAPaintWork(user)}>
                 Edit
               </Button>
               <ButtonGroup>
@@ -276,7 +285,7 @@ export default function PaintWork() {
           return cellValue;
       }
     },
-    [onWarnOpenChange, onDecorationOpenChange]
+    [onWarnOpenChange, onDecorationOpenChange, onEditOpenChange]
   );
 
   const onNextPage = React.useCallback(() => {
@@ -494,7 +503,7 @@ export default function PaintWork() {
         </TableBody>
       </Table>
 
-      <ModalForm
+      <AddPaintWork
         fields={{
           title: true,
           description: true,
@@ -509,6 +518,17 @@ export default function PaintWork() {
         onTipsOpenChange={onTipsOpenChange} // control to pop up the tips window.
         setTipsMsg={setTipsMsg}
         setIsMainDataFetched={setIsMainDataFetched} // control to excute the useEffect() method to refresh the main data.
+      />
+
+      <EditPaintWork 
+        isOpen = {isEditOpen}
+        onOpenChange={onEditOpenChange}
+        onTipsOpenChange={onTipsOpenChange} // control to pop up the tips window.
+        setTipsMsg={setTipsMsg}
+        setIsMainDataFetched={setIsMainDataFetched}
+        aPaintWork={aPaintWork}
+        setAPaintWork={setAPaintWork}
+
       />
 
       <TipsPop

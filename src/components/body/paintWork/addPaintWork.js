@@ -11,7 +11,7 @@ import {DatePicker} from "@nextui-org/date-picker";
  * @param {*} props 
  * @returns 
  */
-function ModalForm(props) {
+function AddPaintWork(props) {
     const {fields, isOpen, onOpenChange, onTipsOpenChange, setTipsMsg, setIsMainDataFetched} = props
 
     const [isTokenValid, setIsTokenValid] = useState(null)
@@ -283,4 +283,4 @@ function ModalForm(props) {
     }
 }
 
-export default ModalForm
+export default AddPaintWork
