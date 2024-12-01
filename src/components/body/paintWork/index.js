@@ -59,7 +59,7 @@ export default function PaintWork() {
   useEffect(() => {
     if (isMainDataFetched === false) {
       (async () => {
-        const response = await axiosInstance.get("/fetchPaintWorks");
+        const response = await axiosInstance.get("/fetchPaintWorks/10000/1");
         setMainData(response.data);
         setIsMainDataFetched(true);
       })();
